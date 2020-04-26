@@ -17,5 +17,5 @@ Other notes or comments to the grader:
   N/A
 
 Future work:
-Need to embellish GUI design in terms of and add more buttons.
+Need to embellish GUI design in terms of appearance and add more buttons.
  
