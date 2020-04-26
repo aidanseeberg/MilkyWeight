@@ -16,4 +16,6 @@ Which team members were on same xteam together?
 Other notes or comments to the grader:
   N/A
 
+Future work:
+Need to embellish GUI design in terms of and add more buttons.
  
