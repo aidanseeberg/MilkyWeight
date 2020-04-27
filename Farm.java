@@ -63,7 +63,7 @@ public class Farm {
 * @param <K>
 * @param <V>
 */
-private class HashTable<K extends Comparable<K>, V> implements HashTableADT<K, V> {
+private class HashTable<K extends Comparable<K>, V> {
 
  private int currentCapacity; // current max capacity of the table
  private double loadFactorThreshold; // load factor threshold of the table which once exceeded,
@@ -239,7 +239,6 @@ private class HashTable<K extends Comparable<K>, V> implements HashTableADT<K, V
   * that location
   */
  @SuppressWarnings("unchecked")
- @Override
  public void insert(K key, V value) throws IllegalNullKeyException {
    if (this.getLoadFactor() > loadFactorThreshold) {
      this.increaseTableSize(currentCapacity);
@@ -285,7 +284,6 @@ private class HashTable<K extends Comparable<K>, V> implements HashTableADT<K, V
   * Removes the designated element corresponding to the param key throws IllegalNullKeyException if
   * key is null returns false if key is not found and true if the key is found and removed
   */
- @Override
  public boolean remove(K key) throws IllegalNullKeyException {
    if (key == null) {
      throw new IllegalNullKeyException("Illegal Null Key");
@@ -321,7 +319,6 @@ private class HashTable<K extends Comparable<K>, V> implements HashTableADT<K, V
   * Returns the data value of the key throws IllegalNullKeyException is key is null throws
   * KeyNotFoundException is key is not found in the table
   */
- @Override
  public V get(K key) throws IllegalNullKeyException, KeyNotFoundException {
 
    if (key == null) {
@@ -356,7 +353,6 @@ private class HashTable<K extends Comparable<K>, V> implements HashTableADT<K, V
  /**
   * returns current number of keys in the table
   */
- @Override
  public int numKeys() {
    return numberOfItems;
  }
@@ -364,7 +360,6 @@ private class HashTable<K extends Comparable<K>, V> implements HashTableADT<K, V
  /**
   * returns the load factor threshold for this hashtable
   */
- @Override
  public double getLoadFactorThreshold() {
    return this.loadFactorThreshold;
  }
@@ -372,7 +367,6 @@ private class HashTable<K extends Comparable<K>, V> implements HashTableADT<K, V
  /**
   * returns the current load factor of the table
   */
- @Override
  public double getLoadFactor() {
    return (double) numberOfItems / (double) currentCapacity;
  }
@@ -380,7 +374,6 @@ private class HashTable<K extends Comparable<K>, V> implements HashTableADT<K, V
  /**
   * returns the current capacity of the table
   */
- @Override
  public int getCapacity() {
    return currentCapacity;
  }
@@ -388,7 +381,6 @@ private class HashTable<K extends Comparable<K>, V> implements HashTableADT<K, V
  /**
   * Tells the grader what kind of collision resolution scheme
   */
- @Override
  public int getCollisionResolution() {
    return 5;
  }
