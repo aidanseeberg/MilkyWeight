@@ -1,3 +1,4 @@
+package application;
 /*
  * A data structure that implements FarmDataADT using a hashtable.
  */
