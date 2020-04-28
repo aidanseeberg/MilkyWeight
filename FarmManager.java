@@ -10,6 +10,9 @@ public class FarmManager {
 
   public static FarmCollection farms;
 
+  public FarmManager() {
+    farms = new FarmCollection();
+  }
 
   /**
    * Upload data .csv file and creates Entry objects to
@@ -32,7 +35,7 @@ public class FarmManager {
           Entry entry = new Entry(entryLine[0], entryLine[1],
               Double.parseDouble(entryLine[2]));
 
-          // farms.add(entry);
+          farms.add(entry);
           System.out.println(entry.toString() + " added");
 
         } catch (Exception e) {
@@ -55,7 +58,6 @@ public class FarmManager {
     }
   }
 
-
   public double[][] getFarmReport(String id, String year)
       throws IllegalNullKeyException, KeyNotFoundException {
 
@@ -70,8 +72,8 @@ public class FarmManager {
       // third column
       double totalWeight = farms.GetAllWeightForMonth(i + 1, year);
       double farmWeight = farms.get(id).getWeightForMonth(i + 1, year);
-      
-      report[i][2] = 100 * (farmWeight / totalWeight) ;
+
+      report[i][2] = 100 * (farmWeight / totalWeight);
     }
     return report;
   }
