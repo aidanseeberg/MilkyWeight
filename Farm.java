@@ -1,6 +1,6 @@
 package application;
 
-public class Farm {
+public class Farm implements Comparable<Farm> {
 
   private String iD;
   private HashTable<String, Double> entries;
@@ -52,6 +52,14 @@ public class Farm {
 
   public int getWeightForMonth(int month, String year) {
     return entries.getMonthWeight(entries, month, year);
+  }
+  
+  /*
+   * Compares Farms by ID
+   */
+  @Override
+  public int compareTo(Farm f) {
+    return getID().compareTo(f.getID());
   }
 
 
