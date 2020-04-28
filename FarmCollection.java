@@ -1,4 +1,8 @@
 package application;
+
+import java.util.ArrayList;
+import java.util.List;
+
 /*
  * A data structure that implements FarmDataADT using a hashtable.
  */
@@ -304,9 +308,25 @@ public class FarmCollection implements FarmCollectionADT {
       }
     }
   }
-
-
   
+  /*
+   * Transforms this collection (hashtable) into a list for when
+   * other needs are more important than operation complexity
+   */
+  public List<Farm> farmList() {
+    List<Farm> farmList = new ArrayList<Farm>();
+    // Traverse through every spot in the hashTable
+    for (int i = 0; i < getCapacity(); i ++) {
+      //Add all keys that may be in this spot 
+      Node current = (Node)hashTable[i];
+      while(current != null) {
+          farmList.add(current.getValue());
+          current = current.getNext();
+        }
+    }
+    return farmList;  
+  }
+
   
   // For immediate testing
   public static void main(String[] args) {
