@@ -249,7 +249,36 @@ public class FarmCollection implements FarmCollectionADT {
     return tableSize;
   }
   
-  
+  /**
+   * 
+   * Returns the total weight of all farms within that given month/year
+   * 
+   * @param month,year - date of total weight needed
+   * @return total weight
+   */
+  public double GetAllWeightForMonth(int month, String year) {
+    double totalWeight = 0;
+    int sizeOfTable = hashTable.length;
+
+    for (int i = 0; i < sizeOfTable; i++) {
+      if (hashTable[i] == null) {
+
+      } else {
+        boolean lastNodeFound = false;
+        Node currNode = (Node) hashTable[i];
+        while (!lastNodeFound) {
+          totalWeight += currNode.getValue().getWeightForMonth(month, year);
+          currNode = currNode.getNext();
+          if (currNode == null) {
+            lastNodeFound = true;
+          } else {
+
+          }
+        }
+      }
+    }
+    return totalWeight;
+  }
   
   
   // For immediate testing
