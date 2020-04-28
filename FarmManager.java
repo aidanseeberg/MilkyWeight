@@ -56,7 +56,8 @@ public class FarmManager {
   }
 
 
-  public double[][] getFarmReport(String id, String year) {
+  public double[][] getFarmReport(String id, String year)
+      throws IllegalNullKeyException, KeyNotFoundException {
 
     double[][] report = new double[12][3]; // column one is month, column two is
                                            // total weight, column three is
@@ -65,9 +66,12 @@ public class FarmManager {
       // first column
       report[i][0] = i + 1;
       // second columnm
-      // report[i][1] = farms.get(id).
+      report[i][1] = farms.get(id).getWeightForMonth(i + 1, year);
       // third column
-      // report[i][1] = farms.get(id).getWeightOfMonth()
+      double totalWeight = farms.GetAllWeightForMonth(i + 1, year);
+      double farmWeight = farms.get(id).getWeightForMonth(i + 1, year);
+      
+      report[i][2] = 100 * (farmWeight / totalWeight) ;
     }
     return report;
   }
