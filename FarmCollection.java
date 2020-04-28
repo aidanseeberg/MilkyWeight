@@ -281,6 +281,32 @@ public class FarmCollection implements FarmCollectionADT {
     return totalWeight;
   }
   
+  public void add(Entry newEntry) throws IllegalNullKeyException {
+
+
+    try {
+      // adds entry to existing farm
+      Farm farm = get(newEntry.getID());
+      farm.addEntry(newEntry.getDate(), newEntry.getWeight());
+    } catch (IllegalNullKeyException e1) {
+
+      throw new IllegalNullKeyException();
+    } catch (KeyNotFoundException e2) {
+
+      // creates no farm if newEntry's ID does not exist
+      insert(newEntry.getID(), new Farm(newEntry.getID()));
+      try {
+        Farm newFarm = get(newEntry.getID());
+        newFarm.addEntry(newEntry.getDate(), newEntry.getWeight());
+      } catch (KeyNotFoundException e) {
+        // TODO Auto-generated catch block
+        e.printStackTrace();
+      }
+    }
+  }
+
+
+  
   
   // For immediate testing
   public static void main(String[] args) {
