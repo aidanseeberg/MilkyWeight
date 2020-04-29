@@ -59,7 +59,32 @@ public class Farm implements Comparable<Farm> {
    */
   @Override
   public int compareTo(Farm f) {
-    return getID().compareTo(f.getID());
+
+    String a = getID();
+    String b = f.getID();
+
+    Integer x = 0;
+    Integer y = 0;
+
+    if (getID().contains("Farm")) {
+      a = getID().split(" ")[1];
+      try {
+        x = Integer.parseInt(a);
+      } catch (NumberFormatException e) {
+      }
+
+    }
+    if (f.getID().contains("Farm")) {
+      b = f.getID().split(" ")[1];
+      try {
+        y = Integer.parseInt(b);
+      } catch (NumberFormatException e2) {
+      }
+    }
+    if (x.compareTo(y) != 0)
+      return x.compareTo(y);
+
+    return a.compareTo(b);
   }
 
 
