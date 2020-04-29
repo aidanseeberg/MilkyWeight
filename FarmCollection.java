@@ -7,41 +7,59 @@ import java.util.List;
  * A data structure that implements FarmDataADT using a hashtable.
  */
 public class FarmCollection implements FarmCollectionADT {
-  
-  //Inner Node class to pair Farms and comparable IDs
-  //Allows Farms to point left/right
+
+  // Inner Node class to pair Farms and comparable IDs
+  // Allows Farms to point left/right
   private class Node {
     private String key;
     private Farm value;
     private Node next;
-    
-    //Two argument constructor
+
+    // Two argument constructor
     private Node(Farm value) {
       this.value = value;
       key = value.getID(); // Set the key to be the Farm's ID
       next = null;
     }
-    
-    //"Getter" methods
-    private String getKey() { return key; }
-    private Farm getValue() { return value; }
-    private Node getNext() { return next; }
 
-    //"Setter" methods
-    private void setKey(String key) { this.key = key; }
-    private void setValue(Farm value) { this.value = value; }
-    private void setNext(Node next) { this.next = next; }
+    // "Getter" methods
+    private String getKey() {
+      return key;
+    }
+
+    private Farm getValue() {
+      return value;
+    }
+
+    private Node getNext() {
+      return next;
+    }
+
+
+
+    // "Setter" methods
+    private void setKey(String key) {
+      this.key = key;
+    }
+
+    private void setValue(Farm value) {
+      this.value = value;
+    }
+
+    private void setNext(Node next) {
+      this.next = next;
+    }
 
   }
-  
-  //Data Field Members
+
+  // Data Field Members
   private double loadFactorThreshold;
   private int tableSize;
   private int size;
   private Object[] hashTable;
-      
+
   /**
-   *  Default no-argument constructor
+   * Default no-argument constructor
    */
   public FarmCollection() {
     loadFactorThreshold = 0.75;
@@ -49,9 +67,10 @@ public class FarmCollection implements FarmCollectionADT {
     size = 0;
     hashTable = new Object[tableSize];
   }
-  
+
   /**
    * Two argument HashTable constructor
+   * 
    * @param initialCapacity
    * @param loadFactorThreshold
    */
@@ -61,11 +80,12 @@ public class FarmCollection implements FarmCollectionADT {
     size = 0;
     hashTable = new Object[tableSize];
   }
-  
+
   /**
    * Hashes the given key to determine the table index to store in
+   * 
    * @param key - key to hash
-   * @return index to store key in 
+   * @return index to store key in
    */
   private int hash(String key) {
     int hashCode = Math.abs(key.hashCode());
@@ -73,38 +93,44 @@ public class FarmCollection implements FarmCollectionADT {
   }
 
   /**
-   * Add the key,value pair to the data structure and increase the number of keys.
-   * If key is already in data structure, replace value with new value
-   * @param key to be added
+   * Add the key,value pair to the data structure and increase the number of
+   * keys. If key is already in data structure, replace value with new value
+   * 
+   * @param key   to be added
    * @param value to be added
    * @throws IllegalNullKeyException if key passed is null
    */
-  public void insert(String key, Farm value) throws IllegalNullKeyException {      
+  public void insert(String key, Farm value) throws IllegalNullKeyException {
+
+    // System.out.println("inserting: key:" + key + ", value: " +
+    // value.getID());
     // Check for exceptions
-    if(key == null) { throw new IllegalNullKeyException("Passed key is null"); }
-    
+    if (key == null) {
+      throw new IllegalNullKeyException("Passed key is null");
+    }
+
     // Create and insert a node into the hashTable array
     Node newNode = new Node(value);
-    
-    if(hashTable[hash(key)] == null) { 
+
+    if (hashTable[hash(key)] == null) {
       // Procedure if this is the first node at the index
       hashTable[hash(key)] = newNode;
-    } else { 
+    } else {
       // Procedure to handle collisions or duplicates further in chain
       Node current = (Node) hashTable[hash(key)];
-      
+
       // Search for duplicate
-      while(current != null) {
-        if(current.getKey() == key) {
+      while (current != null) {
+        if (current.getKey() == key) {
           current.setValue(value);
           return; // To avoid another insert and incrementing size
         }
         current = current.getNext();
       }
       // Insert node at end of chain if duplicate was not found
-      current = (Node) hashTable[hash(key)]; // Reset 
-      
-      while(current.getNext() != null) {
+      current = (Node) hashTable[hash(key)]; // Reset
+
+      while (current.getNext() != null) {
         current = current.getNext();
       }
       current.setNext(newNode);
@@ -112,103 +138,114 @@ public class FarmCollection implements FarmCollectionADT {
     // Increment size
     size++;
     // Resize and rehash if load factor threshold is passed
-    if(getLoadFactor() >= getLoadFactorThreshold()) { resize(); }
+    if (getLoadFactor() >= getLoadFactorThreshold()) {
+      resize();
+    }
   }
-  
+
   /**
-   * Resizes the table and rehashes all nodes 
+   * Resizes the table and rehashes all nodes
    */
   private void resize() {
     // Increase tableSize, preserve old array, and resize/reset hashTable
-    tableSize = tableSize*2 + 1;
+    tableSize = tableSize * 2 + 1;
     Object[] oldHashTable = hashTable;
     Object[] newHashTable = new Object[tableSize];
     hashTable = newHashTable;
     size = 0;
-    
+
     // Iterate through every node and rehash into the new table
-    for(int i = 0; i < oldHashTable.length; i++) {
+    for (int i = 0; i < oldHashTable.length; i++) {
       Node current = (Node) oldHashTable[i];
-      while(current != null) {
+      while (current != null) {
         try {
           insert(current.getKey(), current.getValue());
-        } catch(IllegalNullKeyException e) { System.out.println(e.getMessage());}
+        } catch (IllegalNullKeyException e) {
+          System.out.println(e.getMessage());
+        }
         current = current.getNext();
       }
     }
   }
 
   /**
-   * If key is found,
-   * remove the key,value pair from the data structure
-   * decrease number of keys and return true
+   * If key is found, remove the key,value pair from the data structure decrease
+   * number of keys and return true
+   * 
    * @param key to be removed
    * @throws IllegalNullKeyException if key passed is null
    * @return true if key is successfully removed, false if key is not found
    */
   public boolean remove(String key) throws IllegalNullKeyException {
     // Check for exceptions
-    if(key == null) { throw new IllegalNullKeyException("Passed key is null"); }
-    
+    if (key == null) {
+      throw new IllegalNullKeyException("Passed key is null");
+    }
+
     // Attempt to find and remove the passed key
-    if(hashTable[hash(key)] == null) { 
+    if (hashTable[hash(key)] == null) {
       // Procedure if no key is found at index
       return false;
-    } else { 
-      if(((Node)hashTable[hash(key)]).getKey() == key) {
+    } else {
+      if (((Node) hashTable[hash(key)]).getKey() == key) {
         // Procedure if key is first node in chain
-        hashTable[hash(key)] = ((Node)hashTable[hash(key)]).getNext();
+        hashTable[hash(key)] = ((Node) hashTable[hash(key)]).getNext();
       } else {
         // Procedure to determine if key exists further in chain
-        Node current = (Node)hashTable[hash(key)];
+        Node current = (Node) hashTable[hash(key)];
         Boolean removed = false;
-        
-        while(current.getNext() != null) {
-          if(current.getNext().getKey() == key) {
+
+        while (current.getNext() != null) {
+          if (current.getNext().getKey() == key) {
             current.setNext(current.getNext().getNext());
             removed = true;
           }
           current = current.getNext();
         }
         // Return false if key was not removed in while loop
-        if(!removed) {
+        if (!removed) {
           return false;
         }
       }
-      //Decrement size and return after key is removed
+      // Decrement size and return after key is removed
       size--;
       return true;
     }
-    
+
   }
 
   /**
-   * Returns the value associated with the specified key
-   * Does not remove key or decrease number of keys
+   * Returns the value associated with the specified key Does not remove key or
+   * decrease number of keys
+   * 
    * @param key to retrieve
    * @throws IllegalNullKeyException if passed key is null
-   * @throws KeyNotFoundException if key is not found
+   * @throws KeyNotFoundException    if key is not found
    * @return value associated with given key
    */
-  public Farm get(String key) throws IllegalNullKeyException, KeyNotFoundException {
+  public Farm get(String key)
+      throws IllegalNullKeyException, KeyNotFoundException {
     // Check for exceptions
-    if(key == null) { throw new IllegalNullKeyException("Passed key is null"); }
-    
-    //Search for key 
-    Node current = (Node)hashTable[hash(key)];
-    while(current != null) {
-      if(current.getKey() == key) {
-        return ((Node)hashTable[hash(key)]).getValue();
+    if (key == null) {
+      throw new IllegalNullKeyException("Passed key is null");
+    }
+
+    // Search for key
+    Node current = (Node) hashTable[hash(key)];
+    while (current != null) {
+      if (current.getKey().equals(key)) {
+        return ((Node) hashTable[hash(key)]).getValue();
       }
       current = current.getNext();
     }
-    
-    //Throw exception if key was not found
+
+    // Throw exception if key was not found
     throw new KeyNotFoundException("Key could not be found");
   }
 
   /**
    * Returns the number of key,value pairs in the data structure
+   * 
    * @return the number of key, value pairs in the data structure
    */
   public int numKeys() {
@@ -216,12 +253,11 @@ public class FarmCollection implements FarmCollectionADT {
   }
 
   /**
-   * Returns the load factor threshold that was
-   * passed into the constructor when creating
-   * the instance of the HashTable.
-   * When the current load factor is greater than or
-   * equal to the specified load factor threshold,
-   * the table is resized and elements are rehashed.
+   * Returns the load factor threshold that was passed into the constructor when
+   * creating the instance of the HashTable. When the current load factor is
+   * greater than or equal to the specified load factor threshold, the table is
+   * resized and elements are rehashed.
+   * 
    * @return the Load Factor Threshold
    */
   public double getLoadFactorThreshold() {
@@ -229,31 +265,32 @@ public class FarmCollection implements FarmCollectionADT {
   }
 
   /**
-   * Returns the current load factor for this hash table
-   * load factor = number of items / current table size
-   * @return the load factor of this 
+   * Returns the current load factor for this hash table load factor = number of
+   * items / current table size
+   * 
+   * @return the load factor of this
    */
   public double getLoadFactor() {
-    return (double)size/(double)tableSize;
+    return (double) size / (double) tableSize;
   }
 
   /**
-   * Return the current Capacity (table size)
-     of the hash table array.
-    
-     The initial capacity must be a positive integer, 1 or greater
-     and is specified in the constructor.
-    
-     REQUIRED: When the load factor threshold is reached,
-     the capacity must increase to: 2 * capacity + 1
-    
+   * Return the current Capacity (table size) of the hash table array.
+   * 
+   * The initial capacity must be a positive integer, 1 or greater and is
+   * specified in the constructor.
+   * 
+   * REQUIRED: When the load factor threshold is reached, the capacity must
+   * increase to: 2 * capacity + 1
+   * 
    * Once increased, the capacity never decreases
+   * 
    * @return the current table size of the hash table array
    */
   public int getCapacity() {
     return tableSize;
   }
-  
+
   /**
    * 
    * Returns the total weight of all farms within that given month/year
@@ -284,7 +321,7 @@ public class FarmCollection implements FarmCollectionADT {
     }
     return totalWeight;
   }
-  
+
   public void add(Entry newEntry) throws IllegalNullKeyException {
 
 
@@ -297,37 +334,37 @@ public class FarmCollection implements FarmCollectionADT {
       throw new IllegalNullKeyException();
     } catch (KeyNotFoundException e2) {
 
-      // creates no farm if newEntry's ID does not exist
+      // System.out.println("creating new farm");
+      // creates new farm if newEntry's ID does not exist
       insert(newEntry.getID(), new Farm(newEntry.getID()));
       try {
         Farm newFarm = get(newEntry.getID());
         newFarm.addEntry(newEntry.getDate(), newEntry.getWeight());
       } catch (KeyNotFoundException e) {
-        // TODO Auto-generated catch block
-        e.printStackTrace();
+        // will never run
       }
     }
   }
-  
+
   /*
-   * Transforms this collection (hashtable) into a list for when
-   * other needs are more important than operation complexity
+   * Transforms this collection (hashtable) into a list for when other needs are
+   * more important than operation complexity
    */
   public List<Farm> farmList() {
     List<Farm> farmList = new ArrayList<Farm>();
     // Traverse through every spot in the hashTable
-    for (int i = 0; i < getCapacity(); i ++) {
-      //Add all keys that may be in this spot 
-      Node current = (Node)hashTable[i];
-      while(current != null) {
-          farmList.add(current.getValue());
-          current = current.getNext();
-        }
+    for (int i = 0; i < getCapacity(); i++) {
+      // Add all keys that may be in this spot
+      Node current = (Node) hashTable[i];
+      while (current != null) {
+        farmList.add(current.getValue());
+        current = current.getNext();
+      }
     }
-    return farmList;  
+    return farmList;
   }
 
-  
+
   // For immediate testing
   public static void main(String[] args) {
     Farm farm110 = new Farm("110");
@@ -341,7 +378,7 @@ public class FarmCollection implements FarmCollectionADT {
     Farm farm118 = new Farm("118");
     Farm farm119 = new Farm("119");
     Farm farm120 = new Farm("120");
-    
+
     FarmCollection test = new FarmCollection();
     try {
       test.insert(farm110.getID(), farm110);
@@ -349,7 +386,7 @@ public class FarmCollection implements FarmCollectionADT {
     } catch (Exception e) {
       System.out.println(e.getMessage());
     }
-    
+
   }
-  
+
 }
