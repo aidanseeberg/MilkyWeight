@@ -75,9 +75,9 @@ public class FarmManager {
       double totalWeight = farms.GetAllWeightForMonth(i + 1, year);
       double farmWeight = farms.get(id).getWeightForMonth(i + 1, year);
 
-      Double percentage =  (100 * (farmWeight / totalWeight));
-      
-      report[i][2] =  (percentage).toString().substring(0,(percentage).toString().indexOf('.') + 3) + "%";
+      double percentage = (currWeight/totalWeightForMonth) * 100; 
+      String shortDec = String.format("%.2f", percentage); 
+      report[i][2] = shortDec;
     }
     return report;
   }
@@ -117,10 +117,9 @@ public class FarmManager {
       // second column - Farm's total weight for year
       report[i][1] = "" + totalFarmWeight;
       // third column - Percentage of total weight for that year
-      Double percentage = (100 * (totalFarmWeight / totalWeightForYear));
-
-      report[i][2] = (percentage).toString().substring(0,
-          (percentage).toString().indexOf('.') + 3) + "%";
+      double percentage = (currWeight/totalWeightForMonth) * 100; 
+      String shortDec = String.format("%.2f", percentage); 
+      report[i][2] = shortDec;
     }
     return report;
   }
