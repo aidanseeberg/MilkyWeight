@@ -119,6 +119,40 @@ public class FarmManager {
     }
     return report;
   }
+   public String[][] getMonthlyReport(String year, String month) {
+    //Number of farms
+    int numFarms = farms.numKeys();
+    //Get all farms in a list
+    List<Farm> farmList = farms.farmList();
+    
+    double totalWeightForMonth = 0.0;
+    
+    int monthInInt = Integer.parseInt(month); 
+    
+    totalWeightForMonth +=  farms.GetAllWeightForMonth(monthInInt, year);
+    /**
+     * creates report String 
+     * each row represents a farm 
+     * column 1 = ID
+     * column 2 = Weight of this farm 
+     * column 3 = Weight of this farm/Total Weight
+     */
+    String[][] report = new String[farmList.size()][3]; 
+    
+    for(int i = 0; i < numFarms; i++) {
+      //Gets current farm
+      Farm current = farmList.remove(0); 
+      //Adds its ID to the array
+      report[i][0] = (String) current.getID(); 
+      //Adds its weight to the array
+      double currWeight = current.getWeightForMonth(monthInInt, year);
+      report[i][1] = "" + current.getWeightForMonth(monthInInt, year); 
+      //Adds its percentage of total to the array 
+      report[i][2] = "" + (currWeight/totalWeightForMonth) * 100; 
+      
+    }
+    return report; 
+  }
 
 
 }
