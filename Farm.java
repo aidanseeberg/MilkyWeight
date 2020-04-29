@@ -50,7 +50,7 @@ public class Farm implements Comparable<Farm> {
   }
 
 
-  public int getWeightForMonth(int month, String year) {
+  public double getWeightForMonth(int month, String year) {
     return entries.getMonthWeight(entries, month, year);
   }
   
