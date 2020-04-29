@@ -387,6 +387,54 @@ public class HashTable<K extends Comparable<K>, V> {
     }
     return totalWeight;
   }
+  
+  /*
+   * Obtains the farm's total weight over the given start (year-month-day) and end (month-day)
+   */
+  @SuppressWarnings("unchecked")
+  public double getWeightForRange(String start, String end) {
+    // Split at regex '-' to parse values 
+    String[] parseStart = start.split("-");
+    int year = Integer.parseInt(parseStart[0]);
+    int startMonth = Integer.parseInt(parseStart[1]);
+    int startDay = Integer.parseInt(parseStart[2]);
+    String[] parseEnd = end.split("-");
+    int endMonth = Integer.parseInt(parseEnd[0]);
+    int endDay = Integer.parseInt(parseEnd[1]);
+    
+    // Determine total weight
+    double totalWeight = 0;
+    
+      // Traverse through every spot in the hashTable
+    for (int i = 0; i < getCapacity(); i ++) {
+      //Add all keys that may be in this spot 
+      DataNode current = (DataNode)table[i];
+      while(current != null) {
+        String[] currentDate = ((String)current.getKey()).split("-");
+        int currentYear = Integer.parseInt(currentDate[0]);
+        int currentMonth = Integer.parseInt(currentDate[1]);
+        int currentDay = Integer.parseInt(currentDate[2]);
+        if (currentYear == year) { // Ensure year is same
+          if(currentMonth == startMonth) { // If month is same as start, day must be greater
+            if(currentDay >= startDay) {
+              totalWeight += (double)current.getData();
+            }
+          } 
+          else if(currentMonth == endMonth) { // If month is same as end, day must be less
+            if(currentDay <= endDay) {
+              totalWeight += (double)current.getData();
+            }
+          }
+          else if(currentMonth > startMonth && currentMonth < endMonth){  // If month is some other time in range, day doesn't matter
+            totalWeight += (double)current.getData();
+          }
+        }
+        current = current.getNextNode();
+      }
+    }
+    
+    return totalWeight;
+  }
 
 }
 
