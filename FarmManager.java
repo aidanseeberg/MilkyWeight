@@ -153,7 +153,9 @@ public class FarmManager {
       double currWeight = current.getWeightForMonth(monthInInt, year);
       report[i][1] = "" + current.getWeightForMonth(monthInInt, year); 
       //Adds its percentage of total to the array 
-      report[i][2] = "" + (currWeight/totalWeightForMonth) * 100; 
+      double percentage = (currWeight/totalWeightForMonth) * 100; 
+      String shortDec = String.format("%.2f", percentage); 
+      report[i][2] = shortDec; 
       
     }
     return report; 
