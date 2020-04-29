@@ -55,6 +55,13 @@ public class Farm implements Comparable<Farm> {
   }
   
   /*
+   * Obtains the farm's total weight over the given start (year-month-day) and end (month-day)
+   */
+  public double getFarmWeightForRange(String start, String end) {
+    return entries.getWeightForRange(start, end);
+  }
+  
+  /*
    * Compares Farms by ID
    */
   @Override
