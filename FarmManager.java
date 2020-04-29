@@ -83,39 +83,44 @@ public class FarmManager {
   }
   
   /*
-   * Displays list of total weight and percentage of total weight
-   * for each farm for a given year
+   * Displays list of total weight and percentage of total weight for each farm
+   * for a given year
    */
-  public Object[][] getAnnualReport(String year) {
+  public String[][] getAnnualReport(String year) {
     // Number of farms
     int numFarms = farms.numKeys();
     // List containing all farms from the FarmCollection
     // Order by natural comparator (compareTo in Farm.java)
     List<Farm> farmList = farms.farmList();
     farmList.sort(null);
-    
-    //Determine total weight for all farms for the given year
+
+    // Determine total weight for all farms for the given year
     double totalWeightForYear = 0.0;
     for (int i = 1; i <= 12; i++) {
       totalWeightForYear += farms.GetAllWeightForMonth(i, year);
     }
-    
-    Object[][] report = new Object[numFarms][3]; // column one is farmID, column two is
-                                                 // total weight, column three is
-                                                 // percentage of total weight 
+
+    String[][] report = new String[numFarms][3]; // column one is farmID, column
+                                                 // two is
+                                                 // total weight, column three
+                                                 // is
+                                                 // percentage of total weight
     for (int i = 0; i < numFarms; i++) {
       Farm current = farmList.remove(0);
       double totalFarmWeight = 0;
       for (int j = 1; j <= 12; j++) {
         totalFarmWeight += current.getWeightForMonth(1, year);
       }
-      
+
       // first column - Farm ID
       report[i][0] = current.getID(); // Next farm in sequence
       // second column - Farm's total weight for year
-      report[i][1] = totalFarmWeight;
+      report[i][1] = "" + totalFarmWeight;
       // third column - Percentage of total weight for that year
-      report[i][1] = totalFarmWeight/totalWeightForYear*100;
+      Double percentage = (100 * (totalFarmWeight / totalWeightForYear));
+
+      report[i][2] = (percentage).toString().substring(0,
+          (percentage).toString().indexOf('.') + 3) + "%";
     }
     return report;
   }
