@@ -159,6 +159,47 @@ public class FarmManager {
     }
     return report; 
   }
+  
+  /*
+   * Prompt user for start date (year-month-day) and end month-day,
+   * Then display the total milk weight per farm and the percentage of the total for each farm over that date range.
+   * The list must be sorted by Farm ID, or you can prompt for ascending or descending order by weight or percentage.
+   */
+  public String[][] getDateRangeReport(String start, String end) {
+    // List containing all farms from the FarmCollection
+    // Order by natural comparator (compareTo in Farm.java)
+    List<Farm> farmList = farms.farmList();
+    farmList.sort(null);
+    /*
+     * create report String 
+     * each row represents a farm 
+     * column 1 = ID
+     * column 2 = Weight of this farm in range
+     * column 3 = Weight of this farm/Total Weight in range
+     */
+    int numFarms = farmList.size();
+    String[][] report = new String[numFarms][3]; 
+    
+    //Determine total weight over range
+    double totalWeight = 0;
+    for(int i = 0; i < numFarms; i++) {
+      totalWeight += farmList.get(i).getFarmWeightForRange(start, end);
+    }
+    
+    //Create report array
+    for(int i = 0; i < numFarms; i++) {
+      //Gets current farm
+      Farm current = farmList.remove(0); 
+      //Adds its ID to the array
+      report[i][0] = (String) current.getID(); 
+      //Adds its weight to the array
+      double currWeight = current.getFarmWeightForRange(start, end);
+      report[i][1] = "" + currWeight; 
+      //Adds its percentage of total to the array 
+      report[i][2] = "" + ((currWeight/totalWeight) * 100); 
+    }
+    return report; 
+  }
 
 
 }
