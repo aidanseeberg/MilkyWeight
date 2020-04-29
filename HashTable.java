@@ -1,6 +1,5 @@
 package application;
 
-
 /**
  * Generic HashTable Holds key value pairs of type K and V
  * 
@@ -361,9 +360,9 @@ public class HashTable<K extends Comparable<K>, V> {
   }
 
   @SuppressWarnings("unchecked")
-  public int getMonthWeight(HashTable<String, Double> entries, int month,
+  public double getMonthWeight(HashTable<String, Double> entries, int month,
       String year) {
-    int totalWeight = 0;
+    double totalWeight = 0;
     int sizeOfTable = entries.table.length;
 
     for (int i = 0; i < sizeOfTable; i++) {
@@ -375,7 +374,7 @@ public class HashTable<K extends Comparable<K>, V> {
         while (!lastNodeFound) {
           String currNodeKey = (String) currNode.getKey();
           if (currNodeKey.contains(year + "-" + month + "-")) {
-            totalWeight = totalWeight + (Integer) currNode.getData();
+            totalWeight = totalWeight + (Double) currNode.getData();
           }
           currNode = currNode.getNextNode();
           if (currNode == null) {
