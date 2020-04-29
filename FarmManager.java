@@ -109,7 +109,7 @@ public class FarmManager {
       Farm current = farmList.remove(0);
       double totalFarmWeight = 0;
       for (int j = 1; j <= 12; j++) {
-        totalFarmWeight += current.getWeightForMonth(1, year);
+        totalFarmWeight += current.getWeightForMonth(j, year);
       }
 
       // first column - Farm ID
