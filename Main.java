@@ -72,6 +72,8 @@ import javafx.scene.text.Font;
 import javafx.stage.Stage;
 import javafx.util.Callback;
 import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.util.Arrays;
 import java.util.Scanner;
 import javax.tools.DocumentationTool.Location;
@@ -94,71 +96,79 @@ import javax.tools.DocumentationTool.Location;
  */
 
 
-@SuppressWarnings("serial")
-final class ChooseFile extends JFrame {
+
+public class Main extends Application {
   private JTextField fileID = new JTextField();
   private JTextField directory = new JTextField();
   private String holder; // important! holder stores the location of the file to be passed to
-                         // FarmManager
+  FarmManager manager = new FarmManager();
+
+  
+
+  // FarmManager
   private JButton openFile = new JButton("Open File");
   private JButton saveFile = new JButton("Save File");
   private FileWriter fw;
-  
 
-  public ChooseFile() {
-    JPanel panel = new JPanel();
-    openFile.addActionListener(new Open());
-    panel.add(openFile);
-    saveFile.addActionListener(new Save());
-    panel.add(saveFile);
-    Container contentPlane = getContentPane();
-    contentPlane.add(panel, BorderLayout.SOUTH);
-    panel = new JPanel();
-    panel.setLayout(new GridLayout(2, 1));
-    panel.add(fileID);
-    panel.add(directory);
-    contentPlane.add(panel, BorderLayout.NORTH);
-  }
+  @SuppressWarnings("serial")
+  final class ChooseFile extends JFrame {
 
-  class Open implements ActionListener {
-    public void actionPerformed(ActionEvent e) {
-      JFileChooser choose = new JFileChooser();
-      int val = choose.showOpenDialog(ChooseFile.this);
-      if (val == JFileChooser.APPROVE_OPTION) {
-        fileID.setText(choose.getSelectedFile().getName());
-        directory.setText(choose.getCurrentDirectory().toString());
-        holder = directory.getText();
+
+    public ChooseFile() {
+      JPanel panel = new JPanel();
+      openFile.addActionListener(new Open());
+      panel.add(openFile);
+      saveFile.addActionListener(new Save());
+      panel.add(saveFile);
+      Container contentPlane = getContentPane();
+      contentPlane.add(panel, BorderLayout.SOUTH);
+      panel = new JPanel();
+      panel.setLayout(new GridLayout(2, 1));
+      panel.add(fileID);
+      panel.add(directory);
+      contentPlane.add(panel, BorderLayout.NORTH);
+    }
+
+    class Open implements ActionListener {
+      public void actionPerformed(ActionEvent e) {
+        JFileChooser choose = new JFileChooser();
+        int val = choose.showOpenDialog(ChooseFile.this);
+        if (val == JFileChooser.APPROVE_OPTION) {
+          fileID.setText(choose.getSelectedFile().getName());
+          directory.setText(choose.getCurrentDirectory().toString());
+          holder = directory.getText();
+        }
+        if (val == JFileChooser.CANCEL_OPTION) {
+          fileID.setText("Action canceled.");
+          directory.setText("");
+        }
       }
-      if (val == JFileChooser.CANCEL_OPTION) {
-        fileID.setText("Action canceled.");
-        directory.setText("");
-      }
+    }
+
+    class Save implements ActionListener {
+
+      public void actionPerformed(ActionEvent e) {
+        if (directory.getText() == "") {
+          directory.setText(""); // does nothing if there is no text
+        } else {
+          holder = directory.getText(); // saves file location to "holder"
+          directory.setText("Successfully saved.");
+          try {
+            fw = new FileWriter(new File(holder)); // maybe try: + ".csv" if not working?
+            fw.write(holder);
+            fw.close();
+          } catch (IOException e1) {
+            // TODO Auto-generated catch block
+            e1.printStackTrace();
+          }
+        }
+        File newFile = new File(holder);
+        manager.uploadData(newFile);
+      }   
     }
   }
 
-  class Save implements ActionListener {
 
-    public void actionPerformed(ActionEvent e) {
-      if (directory.getText() == "") {
-        directory.setText(""); // does nothing if there is no text
-      } else {
-          holder = directory.getText(); //saves file location to "holder"
-				  directory.setText("Successfully saved.");
-				  try {
-					  fw = new FileWriter(new File(holder)); // maybe try: + ".csv" if not working?
-					  fw.write(holder);
-					  fw.close();
-					} catch (IOException e1) {
-						  // TODO Auto-generated catch block
-						e1.printStackTrace();
-					}
-      }
-    }
-  }
-}
-
-
-public class Main extends Application {
   private static final int WINDOW_WIDTH = 1200;
   private static final int WINDOW_HEIGHT = 600;
   int count = 0;
@@ -166,18 +176,14 @@ public class Main extends Application {
   static TableView<ObservableList<String>> tableView = new TableView<>();
 
 
-
   Scene scene1, scene2, scene3, scene4, farmScene, monthScene, yearScene, dataRangeScene, addScene,
       removeScene;
 
   Scanner input = new Scanner(System.in);
 
-  FarmManager manager = new FarmManager();
 
   public void start(Stage primaryStage) throws Exception {
     // uploading farm manager data
-    for (int i = 1; i <= 12; i++)
-      manager.uploadData(new File("2019-" + i + ".csv"));
 
     // initializing border panes for each view
     BorderPane mainView = new BorderPane();
@@ -190,8 +196,6 @@ public class Main extends Application {
     BorderPane dataRangeView = new BorderPane();
     BorderPane addView = new BorderPane();
     BorderPane removeView = new BorderPane();
-
-
 
     addLabel(mainView, editView, dataView, uploadView);
     addButton(mainView);
@@ -247,7 +251,7 @@ public class Main extends Application {
 
 
     // ** Cool Shadowy Stuff **
-     shadow(b1, b2, b3, b4, b5, back, back2, back3);
+    shadow(b1, b2, b3, b4, b5, back, back2, back3);
 
     // setting buttons to do things
     b1.setOnAction(e -> primaryStage.setScene(scene2));
@@ -336,17 +340,33 @@ public class Main extends Application {
     farmView.setCenter(vone);
 
 
+
     submit.setOnAction(e -> {
       tableView.getItems().clear();
 
-      String[][] temp = null;
-      try {
-        temp = manager.getFarmReport(farm.getText(), dataField.getText());
+      Label error = new Label("Error: invalid input: please try again");
 
-      } catch (IllegalNullKeyException | KeyNotFoundException e1) {
-        // TODO Auto-generated catch block
-        e1.printStackTrace();
+      String[][] temp = null;
+
+      if (count == 0) {
+        try {
+          temp = manager.getFarmReport(farm.getText(), dataField.getText());
+          count = 1;
+
+        } catch (IllegalNullKeyException e1) {
+          // TODO Auto-generated catch block
+          count = 0;
+          farmView.setRight(error);
+
+        } catch (KeyNotFoundException e1) {
+          // TODO Auto-generated catch block
+          count = 0;
+          farmView.setRight(error);
+        }
       }
+
+      count = 0;
+
       // creating table with 2-d array attributes
 
       ObservableList<ObservableList<String>> data = FXCollections.observableArrayList();
@@ -761,4 +781,3 @@ public class Main extends Application {
     launch(args);
   }
 }
-
