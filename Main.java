@@ -102,6 +102,7 @@ final class ChooseFile extends JFrame {
                          // FarmManager
   private JButton openFile = new JButton("Open File");
   private JButton saveFile = new JButton("Save File");
+  private FileWriter fw;
   
 
   public ChooseFile() {
@@ -141,8 +142,16 @@ final class ChooseFile extends JFrame {
       if (directory.getText() == "") {
         directory.setText(""); // does nothing if there is no text
       } else {
-        holder = directory.getText(); // saves file location to "holder"
-        directory.setText("Successfully saved.");
+          holder = directory.getText(); //saves file location to "holder"
+				  directory.setText("Successfully saved.");
+				  try {
+					  fw = new FileWriter(new File(holder)); // maybe try: + ".csv" if not working?
+					  fw.write(holder);
+					  fw.close();
+					} catch (IOException e1) {
+						  // TODO Auto-generated catch block
+						e1.printStackTrace();
+					}
       }
     }
   }
