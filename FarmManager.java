@@ -33,15 +33,30 @@ public class FarmManager {
 
         // use comma as separator
         String[] entryLine = line.split(",");
+        Entry entry = null;
         try {
-          Entry entry = new Entry(entryLine[0], entryLine[1],
+          entry = new Entry(entryLine[0], entryLine[1],
               Double.parseDouble(entryLine[2]));
 
+          if (entry.getDate().split("-").length != 3)
+            throw new IllegalArgumentException();
+          if (entry.getID().equals(""))
+            throw new IllegalArgumentException();
+          if (!entry.getID().contains("Farm"))
+            throw new IllegalArgumentException();
+          // System.out.println(entry);
           farms.add(entry);
-          System.out.println(entry.toString() + " added");
+          // System.out.println(entry.toString() + " added");
 
-        } catch (Exception e) {
-          System.out.println("entry not valid");
+        } catch (NumberFormatException e) {
+          System.out
+              .println("entry's weight cannot be parsed, skipping entry.");
+        } catch (IllegalArgumentException e2) {
+          System.out.println("data not in correct format");
+
+        } catch (IllegalNullKeyException e3) {
+          System.out.println("cannot add null entry");
+
         }
       }
 
@@ -60,6 +75,17 @@ public class FarmManager {
     }
   }
 
+  public void validateEntry(Entry entry) {
+
+    String date = entry.getDate();
+    String id = entry.getID();
+    double weight = entry.getWeight();
+
+
+
+  }
+
+
   public String[][] getFarmReport(String id, String year)
       throws IllegalNullKeyException, KeyNotFoundException {
 
@@ -75,13 +101,13 @@ public class FarmManager {
       double totalWeight = farms.GetAllWeightForMonth(i + 1, year);
       double farmWeight = farms.get(id).getWeightForMonth(i + 1, year);
 
-      double percentage = (farmWeight/totalWeight) * 100; 
-      String shortDec = String.format("%.2f", percentage); 
+      double percentage = (farmWeight / totalWeight) * 100;
+      String shortDec = String.format("%.2f", percentage);
       report[i][2] = shortDec;
     }
     return report;
   }
-  
+
   /*
    * Displays list of total weight and percentage of total weight for each farm
    * for a given year
@@ -117,53 +143,53 @@ public class FarmManager {
       // second column - Farm's total weight for year
       report[i][1] = "" + totalFarmWeight;
       // third column - Percentage of total weight for that year
-      double percentage = (totalFarmWeight/totalWeightForYear) * 100; 
-      String shortDec = String.format("%.2f", percentage); 
+      double percentage = (totalFarmWeight / totalWeightForYear) * 100;
+      String shortDec = String.format("%.2f", percentage);
       report[i][2] = shortDec;
     }
     return report;
   }
-   public String[][] getMonthlyReport(String year, String month) {
-    //Number of farms
+
+  public String[][] getMonthlyReport(String year, String month) {
+    // Number of farms
     int numFarms = farms.numKeys();
-    //Get all farms in a list
+    // Get all farms in a list
     List<Farm> farmList = farms.farmList();
-    
+    farmList.sort(null);
+
     double totalWeightForMonth = 0.0;
-    
-    int monthInInt = Integer.parseInt(month); 
-    
-    totalWeightForMonth +=  farms.GetAllWeightForMonth(monthInInt, year);
+
+    int monthInInt = Integer.parseInt(month);
+
+    totalWeightForMonth += farms.GetAllWeightForMonth(monthInInt, year);
     /**
-     * creates report String 
-     * each row represents a farm 
-     * column 1 = ID
-     * column 2 = Weight of this farm 
-     * column 3 = Weight of this farm/Total Weight
+     * creates report String each row represents a farm column 1 = ID column 2 =
+     * Weight of this farm column 3 = Weight of this farm/Total Weight
      */
-    String[][] report = new String[farmList.size()][3]; 
-    
-    for(int i = 0; i < numFarms; i++) {
-      //Gets current farm
-      Farm current = farmList.remove(0); 
-      //Adds its ID to the array
-      report[i][0] = (String) current.getID(); 
-      //Adds its weight to the array
+    String[][] report = new String[farmList.size()][3];
+
+    for (int i = 0; i < numFarms; i++) {
+      // Gets current farm
+      Farm current = farmList.remove(0);
+      // Adds its ID to the array
+      report[i][0] = (String) current.getID();
+      // Adds its weight to the array
       double currWeight = current.getWeightForMonth(monthInInt, year);
-      report[i][1] = "" + current.getWeightForMonth(monthInInt, year); 
-      //Adds its percentage of total to the array 
-      double percentage = (currWeight/totalWeightForMonth) * 100; 
-      String shortDec = String.format("%.2f", percentage); 
-      report[i][2] = shortDec; 
-      
+      report[i][1] = "" + current.getWeightForMonth(monthInInt, year);
+      // Adds its percentage of total to the array
+      double percentage = (currWeight / totalWeightForMonth) * 100;
+      String shortDec = String.format("%.2f", percentage);
+      report[i][2] = shortDec;
+
     }
-    return report; 
+    return report;
   }
-  
+
   /*
-   * Prompt user for start date (year-month-day) and end month-day,
-   * Then display the total milk weight per farm and the percentage of the total for each farm over that date range.
-   * The list must be sorted by Farm ID, or you can prompt for ascending or descending order by weight or percentage.
+   * Prompt user for start date (year-month-day) and end month-day, Then display
+   * the total milk weight per farm and the percentage of the total for each
+   * farm over that date range. The list must be sorted by Farm ID, or you can
+   * prompt for ascending or descending order by weight or percentage.
    */
   public String[][] getDateRangeReport(String start, String end) {
     // List containing all farms from the FarmCollection
@@ -171,37 +197,32 @@ public class FarmManager {
     List<Farm> farmList = farms.farmList();
     farmList.sort(null);
     /*
-     * create report String 
-     * each row represents a farm 
-     * column 1 = ID
-     * column 2 = Weight of this farm in range
-     * column 3 = Weight of this farm/Total Weight in range
+     * create report String each row represents a farm column 1 = ID column 2 =
+     * Weight of this farm in range column 3 = Weight of this farm/Total Weight
+     * in range
      */
     int numFarms = farmList.size();
-    String[][] report = new String[numFarms][3]; 
-    
-    //Determine total weight over range
+    String[][] report = new String[numFarms][3];
+
+    // Determine total weight over range
     double totalWeight = 0;
-    for(int i = 0; i < numFarms; i++) {
+    for (int i = 0; i < numFarms; i++) {
       totalWeight += farmList.get(i).getFarmWeightForRange(start, end);
     }
-    
-    //Create report array
-    for(int i = 0; i < numFarms; i++) {
-      //Gets current farm
-      Farm current = farmList.remove(0); 
-      //Adds its ID to the array
-      report[i][0] = (String) current.getID(); 
-      //Adds its weight to the array
+
+    // Create report array
+    for (int i = 0; i < numFarms; i++) {
+      // Gets current farm
+      Farm current = farmList.remove(0);
+      // Adds its ID to the array
+      report[i][0] = (String) current.getID();
+      // Adds its weight to the array
       double currWeight = current.getFarmWeightForRange(start, end);
-      report[i][1] = "" + currWeight; 
-      //Adds its percentage of total to the array 
-      report[i][2] = "" + ((currWeight/totalWeight) * 100); 
+      report[i][1] = "" + currWeight;
+      // Adds its percentage of total to the array
+      report[i][2] = "" + ((currWeight / totalWeight) * 100);
     }
-    return report; 
+    return report;
   }
 
-
 }
-
-
