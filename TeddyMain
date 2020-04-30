@@ -234,11 +234,8 @@ public class Main extends Application {
 
 		// setting images
 		Image img1 = new Image("cow.jpg");
-		Image img2 = new Image("data.png", 500, 200, false, false);
 		ImageView iv1 = new ImageView(img1);
-		ImageView iv2 = new ImageView(img2);
 		iv1.setPreserveRatio(true);
-		iv2.setPreserveRatio(true);
 
 		// ** Cool Shadowy Stuff **
 		shadow(b1, b2, b3, b4, b5, back, back2, back3);
