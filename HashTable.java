@@ -346,7 +346,7 @@ public class HashTable<K extends Comparable<K>, V> {
         boolean lastNodeFound = false;
         DataNode currNode = (HashTable<K, V>.DataNode) entries.table[i];
         while (!lastNodeFound) {
-          totalWeight = totalWeight + (Integer) currNode.getData();
+          totalWeight = totalWeight + (Double) currNode.getData();
           currNode = currNode.getNextNode();
           if (currNode == null) {
             lastNodeFound = true;
