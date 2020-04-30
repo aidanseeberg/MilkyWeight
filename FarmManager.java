@@ -8,10 +8,20 @@ import java.io.IOException;
 import java.util.List;
 import java.util.ArrayList;
 
+/**
+ * The class that handles data parsing and reports. Computes report to pass
+ * along to the UI to display to the user.
+ * 
+ * @author Aidan Seeberg
+ *
+ */
 public class FarmManager {
 
   public static FarmCollection farms;
 
+  /**
+   * Default constructor
+   */
   public FarmManager() {
     farms = new FarmCollection();
   }
@@ -76,6 +86,15 @@ public class FarmManager {
   }
 
 
+  /**
+   * Returns a Farm Report given a specific id and year
+   * 
+   * @param id
+   * @param year
+   * @return
+   * @throws IllegalNullKeyException
+   * @throws KeyNotFoundException
+   */
   public String[][] getFarmReport(String id, String year)
       throws IllegalNullKeyException, KeyNotFoundException {
 
@@ -140,6 +159,13 @@ public class FarmManager {
     return report;
   }
 
+  /**
+   * Produces a monthly report given a specific year and month
+   * 
+   * @param year
+   * @param month
+   * @return
+   */
   public String[][] getMonthlyReport(String year, String month) {
     // Number of farms
     int numFarms = farms.numKeys();
