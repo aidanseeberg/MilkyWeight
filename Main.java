@@ -1,6 +1,6 @@
 /**
  * Main.java created by aidan seeberg, ethan hood, sarat sagaram, teddy nguyen, zolo amgaabaatar on
- * MacBookPro in p3b
+ * MacBookPro in HelloFX
  *
  * Author: Sarat Sagaram (ssagaram@wisc.edu)
  * 
@@ -103,7 +103,7 @@ public class Main extends Application {
   private String holder; // important! holder stores the location of the file to be passed to
   FarmManager manager = new FarmManager();
 
-  
+
 
   // FarmManager
   private JButton openFile = new JButton("Open File");
@@ -151,7 +151,7 @@ public class Main extends Application {
         if (directory.getText() == "") {
           directory.setText(""); // does nothing if there is no text
         } else {
-          holder = directory.getText(); // saves file location to "holder"
+          holder = directory.getText() + fileID.getText(); // saves file location to "holder"
           directory.setText("Successfully saved.");
           try {
             fw = new FileWriter(new File(holder)); // maybe try: + ".csv" if not working?
@@ -164,7 +164,7 @@ public class Main extends Application {
         }
         File newFile = new File(holder);
         manager.uploadData(newFile);
-      }   
+      }
     }
   }
 
@@ -182,9 +182,10 @@ public class Main extends Application {
   Scanner input = new Scanner(System.in);
 
 
+  @SuppressWarnings("unchecked")
   public void start(Stage primaryStage) throws Exception {
     // uploading farm manager data
-
+    
     // initializing border panes for each view
     BorderPane mainView = new BorderPane();
     BorderPane editView = new BorderPane();
@@ -309,9 +310,6 @@ public class Main extends Application {
     uploadView.setCenter(vbox4);
     uploadView.setBottom(back3);
 
-    // add view attributes
-    HBox addHbox = new HBox();
-
 
 
     // farmView attributes
@@ -339,36 +337,32 @@ public class Main extends Application {
 
     farmView.setCenter(vone);
 
+    Label error = new Label("Error, invalid input: please press the back button and try again!");
 
 
     submit.setOnAction(e -> {
       tableView.getItems().clear();
 
-      Label error = new Label("Error: invalid input: please try again");
+      try {
+        Integer.parseInt(dataField.getText());
+      } catch (NumberFormatException e3) {
+        farmView.setRight(error);
+      }
 
       String[][] temp = null;
 
-      if (count == 0) {
-        try {
-          temp = manager.getFarmReport(farm.getText(), dataField.getText());
-          count = 1;
+      try {
+        temp = manager.getFarmReport(farm.getText(), dataField.getText());
+      } catch (IllegalNullKeyException e1) {
+        // TODO Auto-generated catch block
+        farmView.setRight(error);
 
-        } catch (IllegalNullKeyException e1) {
-          // TODO Auto-generated catch block
-          count = 0;
-          farmView.setRight(error);
-
-        } catch (KeyNotFoundException e1) {
-          // TODO Auto-generated catch block
-          count = 0;
-          farmView.setRight(error);
-        }
+      } catch (KeyNotFoundException e1) {
+        // TODO Auto-generated catch block
+        farmView.setRight(error);
       }
 
-      count = 0;
-
       // creating table with 2-d array attributes
-
       ObservableList<ObservableList<String>> data = FXCollections.observableArrayList();
 
       for (String[] row : temp) {
@@ -376,14 +370,15 @@ public class Main extends Application {
       }
       tableView.setItems(data);
 
-      for (int i = 0; i < temp[0].length; i++) {
-        final int curCol = i;
-        final TableColumn<ObservableList<String>, String> column =
-            new TableColumn<>("Farm " + (curCol + 1));
-        column.setCellValueFactory(
-            param -> new ReadOnlyObjectWrapper<>(param.getValue().get(curCol)));
-        tableView.getColumns().add(column);
-      }
+      final TableColumn<ObservableList<String>, String> column = new TableColumn<>("Farm");
+      final TableColumn<ObservableList<String>, String> column2 = new TableColumn<>("Milk Weight");
+      final TableColumn<ObservableList<String>, String> column3 = new TableColumn<>("Percentage");
+
+      column.setCellValueFactory(param -> new ReadOnlyObjectWrapper<>(param.getValue().get(0)));
+      column2.setCellValueFactory(param -> new ReadOnlyObjectWrapper<>(param.getValue().get(1)));
+      column3.setCellValueFactory(param -> new ReadOnlyObjectWrapper<>(param.getValue().get(2)));
+      tableView.getColumns().addAll(column, column2, column3);
+
 
       // adding table to dataView screen
       tableView.setItems(data);
@@ -398,8 +393,8 @@ public class Main extends Application {
       primaryStage.setScene(scene3);
       farmView.getChildren().remove(tableView);
       farmView.setCenter(vone);
+      error.setVisible(false);
     });
-
 
     // month view attributes
     Button submit2 = new Button("Submit");
@@ -424,21 +419,32 @@ public class Main extends Application {
 
     monthView.setCenter(vthree);
 
-    monthBack.setOnAction(e -> {
-      primaryStage.setScene(scene3);
-      monthView.getChildren().remove(tableView2);
-      monthView.setCenter(vthree);
 
-    });
+    Label error2 = new Label("Error: invalid input: please press the back button and try again!");
+
 
     submit2.setOnAction(e -> {
+
+      try {
+        int a = Integer.parseInt(farm2.getText());
+        if (a < 0) {
+          monthView.setRight(error2);
+        }
+        int b = Integer.parseInt(dataField2.getText());
+        if (b > 12 || b < 0) {
+          monthView.setRight(error2);
+        }
+      } catch (NumberFormatException e3) {
+        monthView.setRight(error2);
+      }
+
 
       // dataRange report in a 2D array
       String[][] temp = manager.getMonthlyReport(farm2.getText(), dataField2.getText());
 
-      // sample tester
-      // double[][] temp = {{2.0, 3.0, 4.0}, {2.0, 3.0, 4.0}, {2.0, 3.0, 4.0}};
-      // String[][] temp = {{"nice to ", "have", "titles"}, {"a", "b", "c"}, {"d", "e", "f"}};
+      temp = manager.getMonthlyReport(farm2.getText(), dataField2.getText());
+
+
 
       // creating table with 2-d array attributes
 
@@ -449,23 +455,31 @@ public class Main extends Application {
       }
       tableView2.setItems(data);
 
-      for (int i = 0; i < temp[0].length; i++) {
-        final int curCol = i;
-        final TableColumn<ObservableList<String>, String> column =
-            new TableColumn<>("Col " + (curCol + 1));
-        column.setCellValueFactory(
-            param -> new ReadOnlyObjectWrapper<>(param.getValue().get(curCol)));
-        tableView2.getColumns().add(column);
-      }
+      final TableColumn<ObservableList<String>, String> column = new TableColumn<>("Farm");
+      final TableColumn<ObservableList<String>, String> column2 = new TableColumn<>("Total Weight");
+      final TableColumn<ObservableList<String>, String> column3 = new TableColumn<>("Percentage");
+
+      column.setCellValueFactory(param -> new ReadOnlyObjectWrapper<>(param.getValue().get(0)));
+      column2.setCellValueFactory(param -> new ReadOnlyObjectWrapper<>(param.getValue().get(1)));
+      column3.setCellValueFactory(param -> new ReadOnlyObjectWrapper<>(param.getValue().get(2)));
+      tableView2.getColumns().addAll(column, column2, column3);
 
       // adding table to monthview screen
       tableView2.setItems(data);
       monthView.setCenter(tableView2);
 
-
     });
 
+    // setting the bottom of the monthView page to contain a back button
     monthView.setBottom(monthBack);
+
+    // back button in month view functionality
+    monthBack.setOnAction(e -> {
+      primaryStage.setScene(scene3);
+      monthView.getChildren().remove(tableView2);
+      monthView.setCenter(vthree);
+      error2.setVisible(false);
+    });
 
     // yearView attributes
     Button submit3 = new Button("Submit");
@@ -487,21 +501,27 @@ public class Main extends Application {
 
     yearView.setCenter(vfive);
 
-    yearBack.setOnAction(e -> {
-      primaryStage.setScene(scene3);
-      yearView.getChildren().remove(tableView3);
-      yearView.setCenter(vfive);
+    Label error3 = new Label("Error: invalid input: please press the back button and try again!");
 
-    });
 
     submit3.setOnAction(e -> {
 
       // dataRange report in a 2D array
       String[][] temp = manager.getAnnualReport(farm3.getText());
 
-      // sample tester
-      // String[][] temp = {{"nice to ", "have", "titles"}, {"a", "b", "c"}, {"d", "e", "f"}};
-      // double[][] temp = {{2.0, 3.0, 4.0}, {2.0, 3.0, 4.0}, {2.0, 3.0, 4.0}};
+      try {
+        int a = Integer.parseInt(farm3.getText());
+        if (a < 0) {
+          yearView.setRight(error3);
+        }
+        
+      } catch (NumberFormatException e3) {
+        yearView.setRight(error3);
+      }
+
+      temp = manager.getAnnualReport(farm3.getText());
+
+
 
       // creating table with 2-d array attributes
 
@@ -512,16 +532,14 @@ public class Main extends Application {
       }
       tableView3.setItems(data);
 
-      for (int i = 0; i < temp[0].length; i++) {
-        final int curCol = i;
-        final TableColumn<ObservableList<String>, String> column =
-            new TableColumn<>("Col " + (curCol + 1));
-        column.setCellValueFactory(
-            param -> new ReadOnlyObjectWrapper<>(param.getValue().get(curCol)));
-        tableView3.getColumns().add(column);
-      }
+      final TableColumn<ObservableList<String>, String> column = new TableColumn<>("Farm");
+      final TableColumn<ObservableList<String>, String> column2 = new TableColumn<>("Total Weight");
+      final TableColumn<ObservableList<String>, String> column3 = new TableColumn<>("Percentage");
 
-
+      column.setCellValueFactory(param -> new ReadOnlyObjectWrapper<>(param.getValue().get(0)));
+      column2.setCellValueFactory(param -> new ReadOnlyObjectWrapper<>(param.getValue().get(1)));
+      column3.setCellValueFactory(param -> new ReadOnlyObjectWrapper<>(param.getValue().get(2)));
+      tableView3.getColumns().addAll(column, column2, column3);
 
       // adding table to dataView screen
       tableView3.setItems(data);
@@ -530,7 +548,16 @@ public class Main extends Application {
 
     });
 
+    // putting back button on bottom of yearView
     yearView.setBottom(yearBack);
+
+    // back button functionality
+    yearBack.setOnAction(e -> {
+      primaryStage.setScene(scene3);
+      yearView.getChildren().remove(tableView3);
+      yearView.setCenter(vfive);
+
+    });
 
     // dataRange view attributes
     Button submit4 = new Button("Submit");
@@ -564,6 +591,9 @@ public class Main extends Application {
       dataRangeView.setCenter(vsix);
 
     });
+    
+    Label error4 = new Label("Error: invalid input: please press the back button and try again!");
+
 
     submit4.setOnAction(e -> {
 
@@ -571,7 +601,41 @@ public class Main extends Application {
       // String[][] temp = manager.getDataRange(farm.getText(), dataField.getText());
 
       // sample tester
-      String[][] temp = {{"nice to ", "have", "titles"}, {"a", "b", "c"}, {"d", "e", "f"}};
+      String[][] temp = null;
+      
+      try {
+        if (!farm4.getText().contains("-") && !dataField4.getText().contains("-"))
+          dataRangeView.setRight(error4);
+        
+        String[] ymd = farm4.getText().split("-");
+        
+        int a = Integer.parseInt(ymd[0]);
+        int b = Integer.parseInt(ymd[1]);
+        int c = Integer.parseInt(ymd[2]);
+        
+        String[] md = farm4.getText().split("-");
+        
+        int d = Integer.parseInt(md[0]);
+        int f = Integer.parseInt(md[1]);
+
+        if (a < 0) {
+          monthView.setRight(error4);
+        }
+        if (b > 12 || b < 0 || d > 12 || d < 0) {
+          dataRangeView.setRight(error4);
+        }
+        if (c > 31 || c < 1 || f > 31 || f < 1) {
+          dataRangeView.setRight(error4);
+        }
+        
+      } catch (NumberFormatException e3) {
+        dataRangeView.setRight(error4);
+      }
+      
+      temp = manager.getDateRangeReport(farm4.getText(), dataField4.getText());
+      
+      
+
       // double[][] temp = {{2.0, 3.0, 4.0}, {2.0, 3.0, 4.0}, {2.0, 3.0, 4.0}};
 
       // creating table with 2-d array attributes
@@ -582,14 +646,14 @@ public class Main extends Application {
       }
       tableView4.setItems(data);
 
-      for (int i = 0; i < temp[0].length; i++) {
-        final int curCol = i;
-        final TableColumn<ObservableList<String>, String> column =
-            new TableColumn<>("Col " + (curCol + 1));
-        column.setCellValueFactory(
-            param -> new ReadOnlyObjectWrapper<>(param.getValue().get(curCol)));
-        tableView4.getColumns().add(column);
-      }
+      final TableColumn<ObservableList<String>, String> column = new TableColumn<>("Farm");
+      final TableColumn<ObservableList<String>, String> column2 = new TableColumn<>("Total Weight");
+      final TableColumn<ObservableList<String>, String> column3 = new TableColumn<>("Percentage");
+
+      column.setCellValueFactory(param -> new ReadOnlyObjectWrapper<>(param.getValue().get(0)));
+      column2.setCellValueFactory(param -> new ReadOnlyObjectWrapper<>(param.getValue().get(1)));
+      column3.setCellValueFactory(param -> new ReadOnlyObjectWrapper<>(param.getValue().get(2)));
+      tableView4.getColumns().addAll(column, column2, column3);
 
       // adding table to dataView screen
       tableView4.setItems(data);
@@ -598,8 +662,16 @@ public class Main extends Application {
 
     });
 
+    // putting back button in dataRangeView
     dataRangeView.setBottom(dataBack);
 
+    // back button functionality
+    dataBack.setOnAction(e -> {
+      primaryStage.setScene(scene3);
+      dataRangeView.getChildren().remove(tableView4);
+      dataRangeView.setCenter(vsix);
+      error4.setVisible(false);
+    });
 
 
     // initializing scenes
