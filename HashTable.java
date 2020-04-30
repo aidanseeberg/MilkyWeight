@@ -411,16 +411,22 @@ public class HashTable<K extends Comparable<K>, V> {
       DataNode current = (DataNode)table[i];
       while(current != null) {
         String[] currentDate = ((String)current.getKey()).split("-");
+        
         int currentYear = Integer.parseInt(currentDate[0]);
         int currentMonth = Integer.parseInt(currentDate[1]);
         int currentDay = Integer.parseInt(currentDate[2]);
         if (currentYear == year) { // Ensure year is same
-          if(currentMonth == startMonth) { // If month is same as start, day must be greater
+          if(startMonth == endMonth && currentMonth == startMonth) { // If all months are same, day must be closely compared
+            if(currentDay >= startDay && currentDay <= endDay) {
+              totalWeight += (double)current.getData();
+            }
+          }
+          else if(currentMonth == startMonth) { // If month is same as start only, day must be greater
             if(currentDay >= startDay) {
               totalWeight += (double)current.getData();
             }
           } 
-          else if(currentMonth == endMonth) { // If month is same as end, day must be less
+          else if(currentMonth == endMonth) { // If month is same as end only, day must be less
             if(currentDay <= endDay) {
               totalWeight += (double)current.getData();
             }
