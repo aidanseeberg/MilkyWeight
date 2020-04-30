@@ -335,8 +335,8 @@ public class HashTable<K extends Comparable<K>, V> {
   }
 
   @SuppressWarnings("unchecked")
-  public int getAllWeight(HashTable<String, Double> entries) {
-    int totalWeight = 0;
+  public double getAllWeight(HashTable<String, Double> entries) {
+    double totalWeight = 0;
     int sizeOfTable = numKeys();
 
     for (int i = 0; i < sizeOfTable; i++) {
@@ -346,7 +346,7 @@ public class HashTable<K extends Comparable<K>, V> {
         boolean lastNodeFound = false;
         DataNode currNode = (HashTable<K, V>.DataNode) entries.table[i];
         while (!lastNodeFound) {
-          totalWeight = totalWeight + (Double) currNode.getData();
+          totalWeight = totalWeight + (double) currNode.getData();
           currNode = currNode.getNextNode();
           if (currNode == null) {
             lastNodeFound = true;
@@ -374,7 +374,7 @@ public class HashTable<K extends Comparable<K>, V> {
         while (!lastNodeFound) {
           String currNodeKey = (String) currNode.getKey();
           if (currNodeKey.contains(year + "-" + month + "-")) {
-            totalWeight = totalWeight + (Double) currNode.getData();
+            totalWeight = totalWeight + (double) currNode.getData();
           }
           currNode = currNode.getNextNode();
           if (currNode == null) {
