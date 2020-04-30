@@ -89,7 +89,7 @@ public class FarmCollection implements FarmCollectionADT {
    */
   private int hash(String key) {
     int hashCode = Math.abs(key.hashCode());
-    
+
     return hashCode % tableSize;
   }
 
@@ -323,6 +323,13 @@ public class FarmCollection implements FarmCollectionADT {
     return totalWeight;
   }
 
+  /**
+   * adds an Entry to the farm. creates new farm if it doesn't exist. Adds to
+   * existing farm if farm is already in collection
+   * 
+   * @param newEntry
+   * @throws IllegalNullKeyException
+   */
   public void add(Entry newEntry) throws IllegalNullKeyException {
 
 
