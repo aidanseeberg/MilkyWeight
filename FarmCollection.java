@@ -89,6 +89,7 @@ public class FarmCollection implements FarmCollectionADT {
    */
   private int hash(String key) {
     int hashCode = Math.abs(key.hashCode());
+    
     return hashCode % tableSize;
   }
 
@@ -234,7 +235,7 @@ public class FarmCollection implements FarmCollectionADT {
     Node current = (Node) hashTable[hash(key)];
     while (current != null) {
       if (current.getKey().equals(key)) {
-        return ((Node) hashTable[hash(key)]).getValue();
+        return current.getValue();
       }
       current = current.getNext();
     }
@@ -364,29 +365,5 @@ public class FarmCollection implements FarmCollectionADT {
     return farmList;
   }
 
-
-  // For immediate testing
-  public static void main(String[] args) {
-    Farm farm110 = new Farm("110");
-    Farm farm111 = new Farm("111");
-    Farm farm112 = new Farm("112");
-    Farm farm113 = new Farm("113");
-    Farm farm114 = new Farm("114");
-    Farm farm115 = new Farm("115");
-    Farm farm116 = new Farm("116");
-    Farm farm117 = new Farm("117");
-    Farm farm118 = new Farm("118");
-    Farm farm119 = new Farm("119");
-    Farm farm120 = new Farm("120");
-
-    FarmCollection test = new FarmCollection();
-    try {
-      test.insert(farm110.getID(), farm110);
-
-    } catch (Exception e) {
-      System.out.println(e.getMessage());
-    }
-
-  }
 
 }
