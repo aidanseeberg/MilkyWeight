@@ -1,5 +1,11 @@
 package application;
 
+/**
+ * Farm class contains all entries that share the same Farm ID
+ * 
+ * @author Aidan Seeberg
+ *
+ */
 public class Farm implements Comparable<Farm> {
 
   private String iD;
@@ -53,14 +59,15 @@ public class Farm implements Comparable<Farm> {
   public double getWeightForMonth(int month, String year) {
     return entries.getMonthWeight(entries, month, year);
   }
-  
+
   /*
-   * Obtains the farm's total weight over the given start (year-month-day) and end (month-day)
+   * Obtains the farm's total weight over the given start (year-month-day) and
+   * end (month-day)
    */
   public double getFarmWeightForRange(String start, String end) {
     return entries.getWeightForRange(start, end);
   }
-  
+
   /*
    * Compares Farms by ID
    */
@@ -93,7 +100,5 @@ public class Farm implements Comparable<Farm> {
 
     return a.compareTo(b);
   }
-
-
 
 }
