@@ -75,16 +75,6 @@ public class FarmManager {
     }
   }
 
-  public void validateEntry(Entry entry) {
-
-    String date = entry.getDate();
-    String id = entry.getID();
-    double weight = entry.getWeight();
-
-
-
-  }
-
 
   public String[][] getFarmReport(String id, String year)
       throws IllegalNullKeyException, KeyNotFoundException {
