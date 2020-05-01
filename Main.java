@@ -1,6 +1,6 @@
 /**
- * Main.java created by aidan seeberg, ethan hood, sarat sagaram, teddy nguyen,
- * zolo amgaabaatar on MacBookPro in HelloFX
+ * Main.java created by aidan seeberg, ethan hood, sarat sagaram, teddy nguyen, zolo amgaabaatar on
+ * MacBookPro in HelloFX
  *
  * Author: Sarat Sagaram (ssagaram@wisc.edu)
  * 
@@ -10,8 +10,7 @@
  * 
  * Lecture: 001 & 002
  * 
- * IDE: Eclipse IDE for Java Developers Version: 2019-12 (4.14.0) Build id:
- * 20191212-1212
+ * IDE: Eclipse IDE for Java Developers Version: 2019-12 (4.14.0) Build id: 20191212-1212
  * 
  * Device: SAGARAM-MacBookPro OS: macOS Mojave Version: 2019 OS Build: 18G2022
  */
@@ -77,8 +76,8 @@ import java.util.Scanner;
 import javax.tools.DocumentationTool.Location;
 
 /**
- * Main.java created by Aidan Seeberg, Ethan Hood, Sarat Sagaram, Teddy Nguyen,
- * Zolo Amgaabaatar on MacBookPro
+ * Main.java created by Aidan Seeberg, Ethan Hood, Sarat Sagaram, Teddy Nguyen, Zolo Amgaabaatar on
+ * MacBookPro
  *
  * Author: Sarat Sagaram (ssagaram@wisc.edu)
  * 
@@ -88,8 +87,7 @@ import javax.tools.DocumentationTool.Location;
  * 
  * Lecture: 001 & 002
  * 
- * IDE: Eclipse IDE for Java Developers Version: 2019-12 (4.14.0) Build id:
- * 20191212-1212
+ * IDE: Eclipse IDE for Java Developers Version: 2019-12 (4.14.0) Build id: 20191212-1212
  * 
  * Device: SAGARAM-MacBookPro OS: macOS Mojave Version: 2019 OS Build: 18G2022
  */
@@ -172,8 +170,8 @@ public class Main extends Application {
   static TableView<ObservableList<String>> tableView = new TableView<>();
 
 
-  Scene scene1, scene2, scene3, scene4, farmScene, monthScene, yearScene,
-      dataRangeScene, addScene, removeScene;
+  Scene scene1, scene2, scene3, scene4, farmScene, monthScene, yearScene, dataRangeScene, addScene,
+      removeScene;
 
   Scanner input = new Scanner(System.in);
 
@@ -248,6 +246,8 @@ public class Main extends Application {
     shadow(b1, b2, b3, b4, b5, back, back2, back3);
 
     // setting buttons to do things
+    Button exit = new Button("EXIT");
+    exit.setOnAction(e -> primaryStage.close());
     b1.setOnAction(e -> primaryStage.setScene(scene2));
     back.setOnAction(e -> primaryStage.setScene(scene1));
     b2.setOnAction(e -> primaryStage.setScene(scene3));
@@ -268,7 +268,7 @@ public class Main extends Application {
 
     // main view attributes
     hbox.setSpacing(6.75);
-    hbox.getChildren().addAll(b5, b2);
+    hbox.getChildren().addAll(b5, b2, exit);
 
     vbox.getChildren().add(iv1);
     vbox.getChildren().add(hbox);
@@ -332,8 +332,7 @@ public class Main extends Application {
 
     farmView.setCenter(vone);
 
-    Label error = new Label(
-        "Error, invalid input: please press the back button and try again!");
+    Label error = new Label("Error, invalid input: please press the back button and try again!");
 
 
     submit.setOnAction(e -> {
@@ -359,27 +358,20 @@ public class Main extends Application {
       }
 
       // creating table with 2-d array attributes
-      ObservableList<ObservableList<String>> data =
-          FXCollections.observableArrayList();
+      ObservableList<ObservableList<String>> data = FXCollections.observableArrayList();
 
       for (String[] row : temp) {
         data.add(FXCollections.observableArrayList(row));
       }
       tableView.setItems(data);
 
-      final TableColumn<ObservableList<String>, String> column =
-          new TableColumn<>("Farm");
-      final TableColumn<ObservableList<String>, String> column2 =
-          new TableColumn<>("Milk Weight");
-      final TableColumn<ObservableList<String>, String> column3 =
-          new TableColumn<>("Percentage");
+      final TableColumn<ObservableList<String>, String> column = new TableColumn<>("Farm");
+      final TableColumn<ObservableList<String>, String> column2 = new TableColumn<>("Milk Weight");
+      final TableColumn<ObservableList<String>, String> column3 = new TableColumn<>("Percentage");
 
-      column.setCellValueFactory(
-          param -> new ReadOnlyObjectWrapper<>(param.getValue().get(0)));
-      column2.setCellValueFactory(
-          param -> new ReadOnlyObjectWrapper<>(param.getValue().get(1)));
-      column3.setCellValueFactory(
-          param -> new ReadOnlyObjectWrapper<>(param.getValue().get(2)));
+      column.setCellValueFactory(param -> new ReadOnlyObjectWrapper<>(param.getValue().get(0)));
+      column2.setCellValueFactory(param -> new ReadOnlyObjectWrapper<>(param.getValue().get(1)));
+      column3.setCellValueFactory(param -> new ReadOnlyObjectWrapper<>(param.getValue().get(2)));
       tableView.getColumns().addAll(column, column2, column3);
 
 
@@ -423,8 +415,7 @@ public class Main extends Application {
     monthView.setCenter(vthree);
 
 
-    Label error2 = new Label(
-        "Error: invalid input: please press the back button and try again!");
+    Label error2 = new Label("Error: invalid input: please press the back button and try again!");
 
 
     submit2.setOnAction(e -> {
@@ -444,8 +435,7 @@ public class Main extends Application {
 
 
       // dataRange report in a 2D array
-      String[][] temp =
-          manager.getMonthlyReport(farm2.getText(), dataField2.getText());
+      String[][] temp = manager.getMonthlyReport(farm2.getText(), dataField2.getText());
 
       temp = manager.getMonthlyReport(farm2.getText(), dataField2.getText());
 
@@ -453,27 +443,20 @@ public class Main extends Application {
 
       // creating table with 2-d array attributes
 
-      ObservableList<ObservableList<String>> data =
-          FXCollections.observableArrayList();
+      ObservableList<ObservableList<String>> data = FXCollections.observableArrayList();
 
       for (String[] row : temp) {
         data.add(FXCollections.observableArrayList(row));
       }
       tableView2.setItems(data);
 
-      final TableColumn<ObservableList<String>, String> column =
-          new TableColumn<>("Farm");
-      final TableColumn<ObservableList<String>, String> column2 =
-          new TableColumn<>("Total Weight");
-      final TableColumn<ObservableList<String>, String> column3 =
-          new TableColumn<>("Percentage");
+      final TableColumn<ObservableList<String>, String> column = new TableColumn<>("Farm");
+      final TableColumn<ObservableList<String>, String> column2 = new TableColumn<>("Total Weight");
+      final TableColumn<ObservableList<String>, String> column3 = new TableColumn<>("Percentage");
 
-      column.setCellValueFactory(
-          param -> new ReadOnlyObjectWrapper<>(param.getValue().get(0)));
-      column2.setCellValueFactory(
-          param -> new ReadOnlyObjectWrapper<>(param.getValue().get(1)));
-      column3.setCellValueFactory(
-          param -> new ReadOnlyObjectWrapper<>(param.getValue().get(2)));
+      column.setCellValueFactory(param -> new ReadOnlyObjectWrapper<>(param.getValue().get(0)));
+      column2.setCellValueFactory(param -> new ReadOnlyObjectWrapper<>(param.getValue().get(1)));
+      column3.setCellValueFactory(param -> new ReadOnlyObjectWrapper<>(param.getValue().get(2)));
       tableView2.getColumns().addAll(column, column2, column3);
 
       // adding table to monthview screen
@@ -513,8 +496,7 @@ public class Main extends Application {
 
     yearView.setCenter(vfive);
 
-    Label error3 = new Label(
-        "Error: invalid input: please press the back button and try again!");
+    Label error3 = new Label("Error: invalid input: please press the back button and try again!");
 
 
     submit3.setOnAction(e -> {
@@ -538,27 +520,20 @@ public class Main extends Application {
 
       // creating table with 2-d array attributes
 
-      ObservableList<ObservableList<String>> data =
-          FXCollections.observableArrayList();
+      ObservableList<ObservableList<String>> data = FXCollections.observableArrayList();
 
       for (String[] row : temp) {
         data.add(FXCollections.observableArrayList(row));
       }
       tableView3.setItems(data);
 
-      final TableColumn<ObservableList<String>, String> column =
-          new TableColumn<>("Farm");
-      final TableColumn<ObservableList<String>, String> column2 =
-          new TableColumn<>("Total Weight");
-      final TableColumn<ObservableList<String>, String> column3 =
-          new TableColumn<>("Percentage");
+      final TableColumn<ObservableList<String>, String> column = new TableColumn<>("Farm");
+      final TableColumn<ObservableList<String>, String> column2 = new TableColumn<>("Total Weight");
+      final TableColumn<ObservableList<String>, String> column3 = new TableColumn<>("Percentage");
 
-      column.setCellValueFactory(
-          param -> new ReadOnlyObjectWrapper<>(param.getValue().get(0)));
-      column2.setCellValueFactory(
-          param -> new ReadOnlyObjectWrapper<>(param.getValue().get(1)));
-      column3.setCellValueFactory(
-          param -> new ReadOnlyObjectWrapper<>(param.getValue().get(2)));
+      column.setCellValueFactory(param -> new ReadOnlyObjectWrapper<>(param.getValue().get(0)));
+      column2.setCellValueFactory(param -> new ReadOnlyObjectWrapper<>(param.getValue().get(1)));
+      column3.setCellValueFactory(param -> new ReadOnlyObjectWrapper<>(param.getValue().get(2)));
       tableView3.getColumns().addAll(column, column2, column3);
 
       // adding table to dataView screen
@@ -612,8 +587,7 @@ public class Main extends Application {
 
     });
 
-    Label error4 = new Label(
-        "Error: invalid input: please press the back button and try again!");
+    Label error4 = new Label("Error: invalid input: please press the back button and try again!");
 
 
     submit4.setOnAction(e -> {
@@ -626,8 +600,7 @@ public class Main extends Application {
       String[][] temp = null;
 
       try {
-        if (!farm4.getText().contains("-")
-            && !dataField4.getText().contains("-"))
+        if (!farm4.getText().contains("-") && !dataField4.getText().contains("-"))
           dataRangeView.setRight(error4);
 
         String[] ymd = farm4.getText().split("-");
@@ -662,27 +635,20 @@ public class Main extends Application {
       // double[][] temp = {{2.0, 3.0, 4.0}, {2.0, 3.0, 4.0}, {2.0, 3.0, 4.0}};
 
       // creating table with 2-d array attributes
-      ObservableList<ObservableList<String>> data =
-          FXCollections.observableArrayList();
+      ObservableList<ObservableList<String>> data = FXCollections.observableArrayList();
 
       for (String[] row : temp) {
         data.add(FXCollections.observableArrayList(row));
       }
       tableView4.setItems(data);
 
-      final TableColumn<ObservableList<String>, String> column =
-          new TableColumn<>("Farm");
-      final TableColumn<ObservableList<String>, String> column2 =
-          new TableColumn<>("Total Weight");
-      final TableColumn<ObservableList<String>, String> column3 =
-          new TableColumn<>("Percentage");
+      final TableColumn<ObservableList<String>, String> column = new TableColumn<>("Farm");
+      final TableColumn<ObservableList<String>, String> column2 = new TableColumn<>("Total Weight");
+      final TableColumn<ObservableList<String>, String> column3 = new TableColumn<>("Percentage");
 
-      column.setCellValueFactory(
-          param -> new ReadOnlyObjectWrapper<>(param.getValue().get(0)));
-      column2.setCellValueFactory(
-          param -> new ReadOnlyObjectWrapper<>(param.getValue().get(1)));
-      column3.setCellValueFactory(
-          param -> new ReadOnlyObjectWrapper<>(param.getValue().get(2)));
+      column.setCellValueFactory(param -> new ReadOnlyObjectWrapper<>(param.getValue().get(0)));
+      column2.setCellValueFactory(param -> new ReadOnlyObjectWrapper<>(param.getValue().get(1)));
+      column3.setCellValueFactory(param -> new ReadOnlyObjectWrapper<>(param.getValue().get(2)));
       tableView4.getColumns().addAll(column, column2, column3);
 
       // adding table to dataView screen
@@ -722,8 +688,7 @@ public class Main extends Application {
 
   }
 
-  public void addLabel(BorderPane pane, BorderPane pane2, BorderPane pane3,
-      BorderPane pane4) {
+  public void addLabel(BorderPane pane, BorderPane pane2, BorderPane pane3, BorderPane pane4) {
     Label label = new Label("Milky Wheyt - Farm Data Manager");
     label.setFont(new Font("Courier", 30));
 
@@ -761,16 +726,15 @@ public class Main extends Application {
     pane.setRight(doneButton);
   }
 
-  public void shadow(Button b1, Button b2, Button b3, Button b4, Button b5,
-      Button back, Button back2, Button back3) {
+  public void shadow(Button b1, Button b2, Button b3, Button b4, Button b5, Button back,
+      Button back2, Button back3) {
     DropShadow shadow = new DropShadow();
-    b1.addEventHandler(MouseEvent.MOUSE_ENTERED,
-        new EventHandler<MouseEvent>() {
-          @Override
-          public void handle(MouseEvent e) {
-            b1.setEffect(shadow);
-          }
-        });
+    b1.addEventHandler(MouseEvent.MOUSE_ENTERED, new EventHandler<MouseEvent>() {
+      @Override
+      public void handle(MouseEvent e) {
+        b1.setEffect(shadow);
+      }
+    });
 
     b1.addEventHandler(MouseEvent.MOUSE_EXITED, new EventHandler<MouseEvent>() {
       @Override
@@ -778,13 +742,12 @@ public class Main extends Application {
         b1.setEffect(null);
       }
     });
-    b2.addEventHandler(MouseEvent.MOUSE_ENTERED,
-        new EventHandler<MouseEvent>() {
-          @Override
-          public void handle(MouseEvent e) {
-            b2.setEffect(shadow);
-          }
-        });
+    b2.addEventHandler(MouseEvent.MOUSE_ENTERED, new EventHandler<MouseEvent>() {
+      @Override
+      public void handle(MouseEvent e) {
+        b2.setEffect(shadow);
+      }
+    });
 
     b2.addEventHandler(MouseEvent.MOUSE_EXITED, new EventHandler<MouseEvent>() {
       @Override
@@ -792,13 +755,12 @@ public class Main extends Application {
         b2.setEffect(null);
       }
     });
-    b3.addEventHandler(MouseEvent.MOUSE_ENTERED,
-        new EventHandler<MouseEvent>() {
-          @Override
-          public void handle(MouseEvent e) {
-            b3.setEffect(shadow);
-          }
-        });
+    b3.addEventHandler(MouseEvent.MOUSE_ENTERED, new EventHandler<MouseEvent>() {
+      @Override
+      public void handle(MouseEvent e) {
+        b3.setEffect(shadow);
+      }
+    });
 
     b3.addEventHandler(MouseEvent.MOUSE_EXITED, new EventHandler<MouseEvent>() {
       @Override
@@ -806,13 +768,12 @@ public class Main extends Application {
         b3.setEffect(null);
       }
     });
-    b4.addEventHandler(MouseEvent.MOUSE_ENTERED,
-        new EventHandler<MouseEvent>() {
-          @Override
-          public void handle(MouseEvent e) {
-            b4.setEffect(shadow);
-          }
-        });
+    b4.addEventHandler(MouseEvent.MOUSE_ENTERED, new EventHandler<MouseEvent>() {
+      @Override
+      public void handle(MouseEvent e) {
+        b4.setEffect(shadow);
+      }
+    });
 
     b4.addEventHandler(MouseEvent.MOUSE_EXITED, new EventHandler<MouseEvent>() {
       @Override
@@ -821,13 +782,12 @@ public class Main extends Application {
       }
     });
 
-    b5.addEventHandler(MouseEvent.MOUSE_ENTERED,
-        new EventHandler<MouseEvent>() {
-          @Override
-          public void handle(MouseEvent e) {
-            b5.setEffect(shadow);
-          }
-        });
+    b5.addEventHandler(MouseEvent.MOUSE_ENTERED, new EventHandler<MouseEvent>() {
+      @Override
+      public void handle(MouseEvent e) {
+        b5.setEffect(shadow);
+      }
+    });
 
     b5.addEventHandler(MouseEvent.MOUSE_EXITED, new EventHandler<MouseEvent>() {
       @Override
@@ -836,53 +796,47 @@ public class Main extends Application {
       }
     });
 
-    back.addEventHandler(MouseEvent.MOUSE_ENTERED,
-        new EventHandler<MouseEvent>() {
-          @Override
-          public void handle(MouseEvent e) {
-            back.setEffect(shadow);
-          }
-        });
+    back.addEventHandler(MouseEvent.MOUSE_ENTERED, new EventHandler<MouseEvent>() {
+      @Override
+      public void handle(MouseEvent e) {
+        back.setEffect(shadow);
+      }
+    });
 
-    back.addEventHandler(MouseEvent.MOUSE_EXITED,
-        new EventHandler<MouseEvent>() {
-          @Override
-          public void handle(MouseEvent e) {
-            back.setEffect(null);
-          }
-        });
+    back.addEventHandler(MouseEvent.MOUSE_EXITED, new EventHandler<MouseEvent>() {
+      @Override
+      public void handle(MouseEvent e) {
+        back.setEffect(null);
+      }
+    });
 
-    back2.addEventHandler(MouseEvent.MOUSE_ENTERED,
-        new EventHandler<MouseEvent>() {
-          @Override
-          public void handle(MouseEvent e) {
-            back2.setEffect(shadow);
-          }
-        });
+    back2.addEventHandler(MouseEvent.MOUSE_ENTERED, new EventHandler<MouseEvent>() {
+      @Override
+      public void handle(MouseEvent e) {
+        back2.setEffect(shadow);
+      }
+    });
 
-    back2.addEventHandler(MouseEvent.MOUSE_EXITED,
-        new EventHandler<MouseEvent>() {
-          @Override
-          public void handle(MouseEvent e) {
-            back2.setEffect(null);
-          }
-        });
+    back2.addEventHandler(MouseEvent.MOUSE_EXITED, new EventHandler<MouseEvent>() {
+      @Override
+      public void handle(MouseEvent e) {
+        back2.setEffect(null);
+      }
+    });
 
-    back3.addEventHandler(MouseEvent.MOUSE_ENTERED,
-        new EventHandler<MouseEvent>() {
-          @Override
-          public void handle(MouseEvent e) {
-            back3.setEffect(shadow);
-          }
-        });
+    back3.addEventHandler(MouseEvent.MOUSE_ENTERED, new EventHandler<MouseEvent>() {
+      @Override
+      public void handle(MouseEvent e) {
+        back3.setEffect(shadow);
+      }
+    });
 
-    back3.addEventHandler(MouseEvent.MOUSE_EXITED,
-        new EventHandler<MouseEvent>() {
-          @Override
-          public void handle(MouseEvent e) {
-            back3.setEffect(null);
-          }
-        });
+    back3.addEventHandler(MouseEvent.MOUSE_EXITED, new EventHandler<MouseEvent>() {
+      @Override
+      public void handle(MouseEvent e) {
+        back3.setEffect(null);
+      }
+    });
   }
 
 
