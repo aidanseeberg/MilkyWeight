@@ -41,12 +41,15 @@ public class FarmManager {
       br = new BufferedReader(new FileReader(inputFile));
       while ((line = br.readLine()) != null) {
 
+        // System.out.println(line);
         // use comma as separator
         String[] entryLine = line.split(",");
         Entry entry = null;
         try {
           entry = new Entry(entryLine[0], entryLine[1],
               Double.parseDouble(entryLine[2]));
+
+
 
           if (entry.getDate().split("-").length != 3)
             throw new IllegalArgumentException();
@@ -57,6 +60,9 @@ public class FarmManager {
           // System.out.println(entry);
           farms.add(entry);
           // System.out.println(entry.toString() + " added");
+
+        } catch (ArrayIndexOutOfBoundsException e1) {
+          System.out.println("array index out of bounds");
 
         } catch (NumberFormatException e) {
           System.out
@@ -236,7 +242,9 @@ public class FarmManager {
       double currWeight = current.getFarmWeightForRange(start, end);
       report[i][1] = "" + currWeight;
       // Adds its percentage of total to the array
-      report[i][2] = "" + ((currWeight / totalWeight) * 100);
+      double percentage = ((currWeight / totalWeight) * 100);
+      String shortDec = String.format("%.2f", percentage);
+      report[i][2] = shortDec;
     }
     return report;
   }
