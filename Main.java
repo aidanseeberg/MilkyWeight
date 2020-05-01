@@ -1,10 +1,10 @@
 /**
- * Main.java created by aidan seeberg, ethan hood, sarat sagaram, teddy nguyen, zolo amgaabaatar on
+ * Main.java created by Aidan Seeberg, Ethan Hood, Sarat Sagaram, Teddy Nguyen, Zolo Amgaabaatar on
  * MacBookPro in HelloFX
  *
  * Author: Sarat Sagaram (ssagaram@wisc.edu)
  * 
- * Date: April 21, 2020
+ * Due: April 30, 2020
  * 
  * Course: CS400
  * 
@@ -14,6 +14,31 @@
  * 
  * Device: SAGARAM-MacBookPro OS: macOS Mojave Version: 2019 OS Build: 18G2022
  */
+
+//////////////////// ALL ASSIGNMENTS INCLUDE THIS SECTION /////////////////////
+//
+// Title:           a3 MilkyWeight
+// Description:		  This program allows the user to upload data files and view them.
+//
+// Files:           Main.java
+// Course:          CS400, Spring, 2020
+//
+// Lecturer's Name: Debra Deppeler
+// Lecture Number: 002
+//
+///////////////////////////// CREDIT OUTSIDE HELP /////////////////////////////
+//
+// Students who get help from sources other than their partner must fully 
+// acknowledge and credit those sources of help here.  Instructors and TAs do 
+// not need to be credited here, but tutors, friends, relatives, room mates, 
+// strangers, and others do.  If you received no outside help from either type
+//  of source, then please explicitly indicate NONE.
+//
+// Persons:         NONE
+// Online Sources:  NONE
+//
+/////////////////////////////// 80 COLUMNS WIDE ///////////////////////////////
+
 package application;
 
 import javafx.application.Application;
@@ -93,7 +118,14 @@ import javax.tools.DocumentationTool.Location;
  */
 
 
-
+/**
+ * The Main executes a GUI where the main screen will appear. This window will
+ * have a photograph of a cow, View Data button, Upload File button, and Press
+ * for help button.
+ * 
+ * @author Sarat Sagaram and Theodore Nguyen
+ *
+ */
 public class Main extends Application {
   private JTextField fileID = new JTextField();
   private JTextField directory = new JTextField();
@@ -101,16 +133,23 @@ public class Main extends Application {
                          // be passed to
   static FarmManager manager = new FarmManager();
 
-
-
   // FarmManager
   private JButton openFile = new JButton("Open File");
   private JButton saveFile = new JButton("Save File");
 
+  
+  /**
+ * ChooseFile class allows the user to choose a data file to import (.csv)
+ * 
+ * @author Theodore Nguyen
+ *
+ */
   @SuppressWarnings("serial")
   final class ChooseFile extends JFrame {
 
-
+    /**
+	 * This is the default constructor.
+	 */
     public ChooseFile() {
       holder = null;
       JPanel panel = new JPanel();
@@ -127,6 +166,14 @@ public class Main extends Application {
       contentPlane.add(panel, BorderLayout.NORTH);
     }
 
+    /**
+	 * Open class is used to allow the user to open a file. This file will then show
+	 * on the screen. Edits are allowable for the user to edit the file location
+	 * address.
+	 * 
+	 * @author Theodore Nguyen
+	 *
+	 */
     class Open implements ActionListener {
       public void actionPerformed(ActionEvent e) {
         JFileChooser choose = new JFileChooser();
@@ -143,6 +190,13 @@ public class Main extends Application {
       }
     }
 
+    /**
+	 * Save class allows the user to save the file that is opened. The file will be
+	 * saved and uploaded into the FarmManager method called uploadData.
+	 * 
+	 * @author Theodore Nguyen
+	 *
+	 */
     class Save implements ActionListener {
 
       public void actionPerformed(ActionEvent e) {
@@ -166,16 +220,17 @@ public class Main extends Application {
   private static final int WINDOW_WIDTH = 1200;
   private static final int WINDOW_HEIGHT = 600;
   int count = 0;
-
   static TableView<ObservableList<String>> tableView = new TableView<>();
-
-
   Scene scene1, scene2, scene3, scene4, farmScene, monthScene, yearScene, dataRangeScene, addScene,
       removeScene;
-
   Scanner input = new Scanner(System.in);
 
-
+/**
+	 * Starts the application and sets the GUI's appearance.
+	 * 
+	 * @param primaryStage - passed in to set the scenes when clicking to navigate forwards or backwards in pages.
+	 * @exception - thrown when data is incompatible
+	 */
   @SuppressWarnings("unchecked")
   public void start(Stage primaryStage) throws Exception {
     // uploading farm manager data
@@ -346,14 +401,16 @@ public class Main extends Application {
 
       String[][] temp = null;
 
+      
       try {
         temp = manager.getFarmReport(farm.getText(), dataField.getText());
-      } catch (IllegalNullKeyException e1) {
-        // TODO Auto-generated catch block
+      } 
+        //caught when key is not found
+        catch (IllegalNullKeyException e1) {
         farmView.setRight(error);
 
+        // caught when key is not found
       } catch (KeyNotFoundException e1) {
-        // TODO Auto-generated catch block
         farmView.setRight(error);
       }
 
@@ -688,6 +745,14 @@ public class Main extends Application {
 
   }
 
+  /**
+	 * Adds labels to the GUI, with formatted fonts for added aesthetic pleasure.
+	 * 
+	 * @param pane  - pane one
+	 * @param pane2 - pane two
+	 * @param pane3 - pane three
+	 * @param pane4 - pane four
+	 */
   public void addLabel(BorderPane pane, BorderPane pane2, BorderPane pane3, BorderPane pane4) {
     Label label = new Label("Milky Wheyt - Farm Data Manager");
     label.setFont(new Font("Courier", 30));
@@ -707,6 +772,13 @@ public class Main extends Application {
     pane4.setTop(label4);
   }
 
+  /**
+	 * Includes a help button which allows the user to understand how to navigate
+	 * the program.
+	 * 
+	 * @param pane - The pane is the window, which is used to call to functions to
+	 *             set the location of different buttons.
+	 */
   public void addButton(BorderPane pane) {
     Button doneButton = new Button("Press for help");
     doneButton.setOnAction(event -> {
@@ -726,6 +798,20 @@ public class Main extends Application {
     pane.setRight(doneButton);
   }
 
+  
+  	/**
+	 * Shadow effects appear when hovering over different buttons using event
+	 * handler implementation for when the mouse is entered versus exited.
+	 * 
+	 * @param b1    - button number one
+	 * @param b2    - button number two
+	 * @param b3    - button number tree
+	 * @param b4    - button number four
+	 * @param b5    - button number five
+	 * @param back  - back button number one
+	 * @param back2 - back button number two
+	 * @param back3 - back button number three
+	 */
   public void shadow(Button b1, Button b2, Button b3, Button b4, Button b5, Button back,
       Button back2, Button back3) {
     DropShadow shadow = new DropShadow();
@@ -838,15 +924,25 @@ public class Main extends Application {
       }
     });
   }
-
-
+  
+  /**
+	 * This method sets up the Upload File window.
+	 * 
+	 * @param frame  - will appear for the user as a separate window for the user to
+	 *               upload a file.
+	 * @param width  - dimension of frame horizontally.
+	 * @param height - dimension of frame vertically.
+	 */
   public static void run(JFrame frame, int width, int height) {
     frame.setSize(width, height);
     frame.setVisible(true);
   }
 
-
-
+  /**
+	 * Main used to launch the GUI.
+	 * 
+	 * @param args - takes in any argument.
+	 */
   public static void main(String[] args) {
     launch(args);
   }
