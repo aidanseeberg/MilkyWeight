@@ -1,6 +1,6 @@
 /**
- * Main.java created by aidan seeberg, ethan hood, sarat sagaram, teddy nguyen, zolo amgaabaatar on
- * MacBookPro in HelloFX
+ * Main.java created by aidan seeberg, ethan hood, sarat sagaram, teddy nguyen,
+ * zolo amgaabaatar on MacBookPro in HelloFX
  *
  * Author: Sarat Sagaram (ssagaram@wisc.edu)
  * 
@@ -10,7 +10,8 @@
  * 
  * Lecture: 001 & 002
  * 
- * IDE: Eclipse IDE for Java Developers Version: 2019-12 (4.14.0) Build id: 20191212-1212
+ * IDE: Eclipse IDE for Java Developers Version: 2019-12 (4.14.0) Build id:
+ * 20191212-1212
  * 
  * Device: SAGARAM-MacBookPro OS: macOS Mojave Version: 2019 OS Build: 18G2022
  */
@@ -22,13 +23,11 @@ import java.awt.Container;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-
 import javax.swing.JButton;
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
-
 import javafx.application.Application;
 import javafx.event.EventHandler;
 import javafx.scene.Scene;
@@ -44,7 +43,6 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Font;
 import javafx.stage.Stage;
-
 import javafx.beans.property.ReadOnlyObjectWrapper;
 import javafx.beans.property.SimpleDoubleProperty;
 import javafx.beans.property.SimpleStringProperty;
@@ -79,8 +77,8 @@ import java.util.Scanner;
 import javax.tools.DocumentationTool.Location;
 
 /**
- * Main.java created by Aidan Seeberg, Ethan Hood, Sarat Sagaram, Teddy Nguyen, Zolo Amgaabaatar on
- * MacBookPro
+ * Main.java created by Aidan Seeberg, Ethan Hood, Sarat Sagaram, Teddy Nguyen,
+ * Zolo Amgaabaatar on MacBookPro
  *
  * Author: Sarat Sagaram (ssagaram@wisc.edu)
  * 
@@ -90,7 +88,8 @@ import javax.tools.DocumentationTool.Location;
  * 
  * Lecture: 001 & 002
  * 
- * IDE: Eclipse IDE for Java Developers Version: 2019-12 (4.14.0) Build id: 20191212-1212
+ * IDE: Eclipse IDE for Java Developers Version: 2019-12 (4.14.0) Build id:
+ * 20191212-1212
  * 
  * Device: SAGARAM-MacBookPro OS: macOS Mojave Version: 2019 OS Build: 18G2022
  */
@@ -100,21 +99,22 @@ import javax.tools.DocumentationTool.Location;
 public class Main extends Application {
   private JTextField fileID = new JTextField();
   private JTextField directory = new JTextField();
-  private String holder; // important! holder stores the location of the file to be passed to
-  FarmManager manager = new FarmManager();
+  private String holder; // important! holder stores the location of the file to
+                         // be passed to
+  static FarmManager manager = new FarmManager();
 
 
 
   // FarmManager
   private JButton openFile = new JButton("Open File");
   private JButton saveFile = new JButton("Save File");
-  private FileWriter fw;
 
   @SuppressWarnings("serial")
   final class ChooseFile extends JFrame {
 
 
     public ChooseFile() {
+      holder = null;
       JPanel panel = new JPanel();
       openFile.addActionListener(new Open());
       panel.add(openFile);
@@ -148,19 +148,15 @@ public class Main extends Application {
     class Save implements ActionListener {
 
       public void actionPerformed(ActionEvent e) {
+        holder = null;
         if (directory.getText() == "") {
           directory.setText(""); // does nothing if there is no text
         } else {
-          holder = directory.getText() + fileID.getText(); // saves file location to "holder"
+          holder = directory.getText() + "/" + fileID.getText(); // saves file
+          // location to
+          // "holder"
           directory.setText("Successfully saved.");
-          try {
-            fw = new FileWriter(new File(holder)); // maybe try: + ".csv" if not working?
-            fw.write(holder);
-            fw.close();
-          } catch (IOException e1) {
-            // TODO Auto-generated catch block
-            e1.printStackTrace();
-          }
+
         }
         File newFile = new File(holder);
         manager.uploadData(newFile);
@@ -176,8 +172,8 @@ public class Main extends Application {
   static TableView<ObservableList<String>> tableView = new TableView<>();
 
 
-  Scene scene1, scene2, scene3, scene4, farmScene, monthScene, yearScene, dataRangeScene, addScene,
-      removeScene;
+  Scene scene1, scene2, scene3, scene4, farmScene, monthScene, yearScene,
+      dataRangeScene, addScene, removeScene;
 
   Scanner input = new Scanner(System.in);
 
@@ -185,7 +181,7 @@ public class Main extends Application {
   @SuppressWarnings("unchecked")
   public void start(Stage primaryStage) throws Exception {
     // uploading farm manager data
-    
+
     // initializing border panes for each view
     BorderPane mainView = new BorderPane();
     BorderPane editView = new BorderPane();
@@ -244,11 +240,8 @@ public class Main extends Application {
 
     // setting images
     Image img1 = new Image("cow.jpg");
-    Image img2 = new Image("data.png", 500, 200, false, false);
     ImageView iv1 = new ImageView(img1);
-    ImageView iv2 = new ImageView(img2);
     iv1.setPreserveRatio(true);
-    iv2.setPreserveRatio(true);
 
 
     // ** Cool Shadowy Stuff **
@@ -259,7 +252,9 @@ public class Main extends Application {
     back.setOnAction(e -> primaryStage.setScene(scene1));
     b2.setOnAction(e -> primaryStage.setScene(scene3));
     back2.setOnAction(e -> primaryStage.setScene(scene1));
-    b5.setOnAction(e -> primaryStage.setScene(scene4));
+    b5.setOnAction(e -> {
+      run(new ChooseFile(), 250, 110);
+    });
     back3.setOnAction(e -> primaryStage.setScene(scene1));
     farmRep.setOnAction(e -> {
       primaryStage.setScene(farmScene);
@@ -273,7 +268,7 @@ public class Main extends Application {
 
     // main view attributes
     hbox.setSpacing(6.75);
-    hbox.getChildren().addAll(b2, b5);
+    hbox.getChildren().addAll(b5, b2);
 
     vbox.getChildren().add(iv1);
     vbox.getChildren().add(hbox);
@@ -337,7 +332,8 @@ public class Main extends Application {
 
     farmView.setCenter(vone);
 
-    Label error = new Label("Error, invalid input: please press the back button and try again!");
+    Label error = new Label(
+        "Error, invalid input: please press the back button and try again!");
 
 
     submit.setOnAction(e -> {
@@ -363,20 +359,27 @@ public class Main extends Application {
       }
 
       // creating table with 2-d array attributes
-      ObservableList<ObservableList<String>> data = FXCollections.observableArrayList();
+      ObservableList<ObservableList<String>> data =
+          FXCollections.observableArrayList();
 
       for (String[] row : temp) {
         data.add(FXCollections.observableArrayList(row));
       }
       tableView.setItems(data);
 
-      final TableColumn<ObservableList<String>, String> column = new TableColumn<>("Farm");
-      final TableColumn<ObservableList<String>, String> column2 = new TableColumn<>("Milk Weight");
-      final TableColumn<ObservableList<String>, String> column3 = new TableColumn<>("Percentage");
+      final TableColumn<ObservableList<String>, String> column =
+          new TableColumn<>("Farm");
+      final TableColumn<ObservableList<String>, String> column2 =
+          new TableColumn<>("Milk Weight");
+      final TableColumn<ObservableList<String>, String> column3 =
+          new TableColumn<>("Percentage");
 
-      column.setCellValueFactory(param -> new ReadOnlyObjectWrapper<>(param.getValue().get(0)));
-      column2.setCellValueFactory(param -> new ReadOnlyObjectWrapper<>(param.getValue().get(1)));
-      column3.setCellValueFactory(param -> new ReadOnlyObjectWrapper<>(param.getValue().get(2)));
+      column.setCellValueFactory(
+          param -> new ReadOnlyObjectWrapper<>(param.getValue().get(0)));
+      column2.setCellValueFactory(
+          param -> new ReadOnlyObjectWrapper<>(param.getValue().get(1)));
+      column3.setCellValueFactory(
+          param -> new ReadOnlyObjectWrapper<>(param.getValue().get(2)));
       tableView.getColumns().addAll(column, column2, column3);
 
 
@@ -420,7 +423,8 @@ public class Main extends Application {
     monthView.setCenter(vthree);
 
 
-    Label error2 = new Label("Error: invalid input: please press the back button and try again!");
+    Label error2 = new Label(
+        "Error: invalid input: please press the back button and try again!");
 
 
     submit2.setOnAction(e -> {
@@ -440,7 +444,8 @@ public class Main extends Application {
 
 
       // dataRange report in a 2D array
-      String[][] temp = manager.getMonthlyReport(farm2.getText(), dataField2.getText());
+      String[][] temp =
+          manager.getMonthlyReport(farm2.getText(), dataField2.getText());
 
       temp = manager.getMonthlyReport(farm2.getText(), dataField2.getText());
 
@@ -448,20 +453,27 @@ public class Main extends Application {
 
       // creating table with 2-d array attributes
 
-      ObservableList<ObservableList<String>> data = FXCollections.observableArrayList();
+      ObservableList<ObservableList<String>> data =
+          FXCollections.observableArrayList();
 
       for (String[] row : temp) {
         data.add(FXCollections.observableArrayList(row));
       }
       tableView2.setItems(data);
 
-      final TableColumn<ObservableList<String>, String> column = new TableColumn<>("Farm");
-      final TableColumn<ObservableList<String>, String> column2 = new TableColumn<>("Total Weight");
-      final TableColumn<ObservableList<String>, String> column3 = new TableColumn<>("Percentage");
+      final TableColumn<ObservableList<String>, String> column =
+          new TableColumn<>("Farm");
+      final TableColumn<ObservableList<String>, String> column2 =
+          new TableColumn<>("Total Weight");
+      final TableColumn<ObservableList<String>, String> column3 =
+          new TableColumn<>("Percentage");
 
-      column.setCellValueFactory(param -> new ReadOnlyObjectWrapper<>(param.getValue().get(0)));
-      column2.setCellValueFactory(param -> new ReadOnlyObjectWrapper<>(param.getValue().get(1)));
-      column3.setCellValueFactory(param -> new ReadOnlyObjectWrapper<>(param.getValue().get(2)));
+      column.setCellValueFactory(
+          param -> new ReadOnlyObjectWrapper<>(param.getValue().get(0)));
+      column2.setCellValueFactory(
+          param -> new ReadOnlyObjectWrapper<>(param.getValue().get(1)));
+      column3.setCellValueFactory(
+          param -> new ReadOnlyObjectWrapper<>(param.getValue().get(2)));
       tableView2.getColumns().addAll(column, column2, column3);
 
       // adding table to monthview screen
@@ -501,7 +513,8 @@ public class Main extends Application {
 
     yearView.setCenter(vfive);
 
-    Label error3 = new Label("Error: invalid input: please press the back button and try again!");
+    Label error3 = new Label(
+        "Error: invalid input: please press the back button and try again!");
 
 
     submit3.setOnAction(e -> {
@@ -514,7 +527,7 @@ public class Main extends Application {
         if (a < 0) {
           yearView.setRight(error3);
         }
-        
+
       } catch (NumberFormatException e3) {
         yearView.setRight(error3);
       }
@@ -525,20 +538,27 @@ public class Main extends Application {
 
       // creating table with 2-d array attributes
 
-      ObservableList<ObservableList<String>> data = FXCollections.observableArrayList();
+      ObservableList<ObservableList<String>> data =
+          FXCollections.observableArrayList();
 
       for (String[] row : temp) {
         data.add(FXCollections.observableArrayList(row));
       }
       tableView3.setItems(data);
 
-      final TableColumn<ObservableList<String>, String> column = new TableColumn<>("Farm");
-      final TableColumn<ObservableList<String>, String> column2 = new TableColumn<>("Total Weight");
-      final TableColumn<ObservableList<String>, String> column3 = new TableColumn<>("Percentage");
+      final TableColumn<ObservableList<String>, String> column =
+          new TableColumn<>("Farm");
+      final TableColumn<ObservableList<String>, String> column2 =
+          new TableColumn<>("Total Weight");
+      final TableColumn<ObservableList<String>, String> column3 =
+          new TableColumn<>("Percentage");
 
-      column.setCellValueFactory(param -> new ReadOnlyObjectWrapper<>(param.getValue().get(0)));
-      column2.setCellValueFactory(param -> new ReadOnlyObjectWrapper<>(param.getValue().get(1)));
-      column3.setCellValueFactory(param -> new ReadOnlyObjectWrapper<>(param.getValue().get(2)));
+      column.setCellValueFactory(
+          param -> new ReadOnlyObjectWrapper<>(param.getValue().get(0)));
+      column2.setCellValueFactory(
+          param -> new ReadOnlyObjectWrapper<>(param.getValue().get(1)));
+      column3.setCellValueFactory(
+          param -> new ReadOnlyObjectWrapper<>(param.getValue().get(2)));
       tableView3.getColumns().addAll(column, column2, column3);
 
       // adding table to dataView screen
@@ -591,30 +611,33 @@ public class Main extends Application {
       dataRangeView.setCenter(vsix);
 
     });
-    
-    Label error4 = new Label("Error: invalid input: please press the back button and try again!");
+
+    Label error4 = new Label(
+        "Error: invalid input: please press the back button and try again!");
 
 
     submit4.setOnAction(e -> {
 
       // dataRange report in a 2D array
-      // String[][] temp = manager.getDataRange(farm.getText(), dataField.getText());
+      // String[][] temp = manager.getDataRange(farm.getText(),
+      // dataField.getText());
 
       // sample tester
       String[][] temp = null;
-      
+
       try {
-        if (!farm4.getText().contains("-") && !dataField4.getText().contains("-"))
+        if (!farm4.getText().contains("-")
+            && !dataField4.getText().contains("-"))
           dataRangeView.setRight(error4);
-        
+
         String[] ymd = farm4.getText().split("-");
-        
+
         int a = Integer.parseInt(ymd[0]);
         int b = Integer.parseInt(ymd[1]);
         int c = Integer.parseInt(ymd[2]);
-        
+
         String[] md = farm4.getText().split("-");
-        
+
         int d = Integer.parseInt(md[0]);
         int f = Integer.parseInt(md[1]);
 
@@ -627,32 +650,39 @@ public class Main extends Application {
         if (c > 31 || c < 1 || f > 31 || f < 1) {
           dataRangeView.setRight(error4);
         }
-        
+
       } catch (NumberFormatException e3) {
         dataRangeView.setRight(error4);
       }
-      
+
       temp = manager.getDateRangeReport(farm4.getText(), dataField4.getText());
-      
-      
+
+
 
       // double[][] temp = {{2.0, 3.0, 4.0}, {2.0, 3.0, 4.0}, {2.0, 3.0, 4.0}};
 
       // creating table with 2-d array attributes
-      ObservableList<ObservableList<String>> data = FXCollections.observableArrayList();
+      ObservableList<ObservableList<String>> data =
+          FXCollections.observableArrayList();
 
       for (String[] row : temp) {
         data.add(FXCollections.observableArrayList(row));
       }
       tableView4.setItems(data);
 
-      final TableColumn<ObservableList<String>, String> column = new TableColumn<>("Farm");
-      final TableColumn<ObservableList<String>, String> column2 = new TableColumn<>("Total Weight");
-      final TableColumn<ObservableList<String>, String> column3 = new TableColumn<>("Percentage");
+      final TableColumn<ObservableList<String>, String> column =
+          new TableColumn<>("Farm");
+      final TableColumn<ObservableList<String>, String> column2 =
+          new TableColumn<>("Total Weight");
+      final TableColumn<ObservableList<String>, String> column3 =
+          new TableColumn<>("Percentage");
 
-      column.setCellValueFactory(param -> new ReadOnlyObjectWrapper<>(param.getValue().get(0)));
-      column2.setCellValueFactory(param -> new ReadOnlyObjectWrapper<>(param.getValue().get(1)));
-      column3.setCellValueFactory(param -> new ReadOnlyObjectWrapper<>(param.getValue().get(2)));
+      column.setCellValueFactory(
+          param -> new ReadOnlyObjectWrapper<>(param.getValue().get(0)));
+      column2.setCellValueFactory(
+          param -> new ReadOnlyObjectWrapper<>(param.getValue().get(1)));
+      column3.setCellValueFactory(
+          param -> new ReadOnlyObjectWrapper<>(param.getValue().get(2)));
       tableView4.getColumns().addAll(column, column2, column3);
 
       // adding table to dataView screen
@@ -692,7 +722,8 @@ public class Main extends Application {
 
   }
 
-  public void addLabel(BorderPane pane, BorderPane pane2, BorderPane pane3, BorderPane pane4) {
+  public void addLabel(BorderPane pane, BorderPane pane2, BorderPane pane3,
+      BorderPane pane4) {
     Label label = new Label("Milky Wheyt - Farm Data Manager");
     label.setFont(new Font("Courier", 30));
 
@@ -716,10 +747,13 @@ public class Main extends Application {
     doneButton.setOnAction(event -> {
       if (doneButton.getText().equals("Press for help")) {
         doneButton.setText(
-            "To add data: Press the ‘Add Entries’ button and enter numerical values between 0-9.\n"
-                + "To remove data: Press the Remove Entries' button and enter numerical values between 0-9.\n"
-                + "Pressing enter will automatically save the data results.\n"
-                + "To load data, press the ‘Download data as a file button.'");
+            "To upload file: Click on the Upload File button and a box will appear to open. "
+                + "\nPlease open a valid .csv file and press save."
+                + "\nTo view the data: Press the View Data button. "
+                + "\nPress the report of your choice. Please enter the farmID, year, month, or day in valid format."
+                + "\nFor example: Year is YYYY format using numbers 0-9;\n Month is a numbers 1-12;"
+                + "\nDay is a number 1-31, depending on the month of your choosing."
+                + "\nfarmID should be formatted Farm followed by a space and number, i.e., Farm 1");
       } else {
         doneButton.setText("Press for help");
       }
@@ -727,15 +761,16 @@ public class Main extends Application {
     pane.setRight(doneButton);
   }
 
-  public void shadow(Button b1, Button b2, Button b3, Button b4, Button b5, Button back,
-      Button back2, Button back3) {
+  public void shadow(Button b1, Button b2, Button b3, Button b4, Button b5,
+      Button back, Button back2, Button back3) {
     DropShadow shadow = new DropShadow();
-    b1.addEventHandler(MouseEvent.MOUSE_ENTERED, new EventHandler<MouseEvent>() {
-      @Override
-      public void handle(MouseEvent e) {
-        b1.setEffect(shadow);
-      }
-    });
+    b1.addEventHandler(MouseEvent.MOUSE_ENTERED,
+        new EventHandler<MouseEvent>() {
+          @Override
+          public void handle(MouseEvent e) {
+            b1.setEffect(shadow);
+          }
+        });
 
     b1.addEventHandler(MouseEvent.MOUSE_EXITED, new EventHandler<MouseEvent>() {
       @Override
@@ -743,12 +778,13 @@ public class Main extends Application {
         b1.setEffect(null);
       }
     });
-    b2.addEventHandler(MouseEvent.MOUSE_ENTERED, new EventHandler<MouseEvent>() {
-      @Override
-      public void handle(MouseEvent e) {
-        b2.setEffect(shadow);
-      }
-    });
+    b2.addEventHandler(MouseEvent.MOUSE_ENTERED,
+        new EventHandler<MouseEvent>() {
+          @Override
+          public void handle(MouseEvent e) {
+            b2.setEffect(shadow);
+          }
+        });
 
     b2.addEventHandler(MouseEvent.MOUSE_EXITED, new EventHandler<MouseEvent>() {
       @Override
@@ -756,12 +792,13 @@ public class Main extends Application {
         b2.setEffect(null);
       }
     });
-    b3.addEventHandler(MouseEvent.MOUSE_ENTERED, new EventHandler<MouseEvent>() {
-      @Override
-      public void handle(MouseEvent e) {
-        b3.setEffect(shadow);
-      }
-    });
+    b3.addEventHandler(MouseEvent.MOUSE_ENTERED,
+        new EventHandler<MouseEvent>() {
+          @Override
+          public void handle(MouseEvent e) {
+            b3.setEffect(shadow);
+          }
+        });
 
     b3.addEventHandler(MouseEvent.MOUSE_EXITED, new EventHandler<MouseEvent>() {
       @Override
@@ -769,12 +806,13 @@ public class Main extends Application {
         b3.setEffect(null);
       }
     });
-    b4.addEventHandler(MouseEvent.MOUSE_ENTERED, new EventHandler<MouseEvent>() {
-      @Override
-      public void handle(MouseEvent e) {
-        b4.setEffect(shadow);
-      }
-    });
+    b4.addEventHandler(MouseEvent.MOUSE_ENTERED,
+        new EventHandler<MouseEvent>() {
+          @Override
+          public void handle(MouseEvent e) {
+            b4.setEffect(shadow);
+          }
+        });
 
     b4.addEventHandler(MouseEvent.MOUSE_EXITED, new EventHandler<MouseEvent>() {
       @Override
@@ -783,13 +821,13 @@ public class Main extends Application {
       }
     });
 
-    b5.addEventHandler(MouseEvent.MOUSE_ENTERED, new EventHandler<MouseEvent>() {
-      @Override
-      public void handle(MouseEvent e) {
-        b5.setEffect(shadow);
-        run(new ChooseFile(), 250, 110);
-      }
-    });
+    b5.addEventHandler(MouseEvent.MOUSE_ENTERED,
+        new EventHandler<MouseEvent>() {
+          @Override
+          public void handle(MouseEvent e) {
+            b5.setEffect(shadow);
+          }
+        });
 
     b5.addEventHandler(MouseEvent.MOUSE_EXITED, new EventHandler<MouseEvent>() {
       @Override
@@ -798,47 +836,53 @@ public class Main extends Application {
       }
     });
 
-    back.addEventHandler(MouseEvent.MOUSE_ENTERED, new EventHandler<MouseEvent>() {
-      @Override
-      public void handle(MouseEvent e) {
-        back.setEffect(shadow);
-      }
-    });
+    back.addEventHandler(MouseEvent.MOUSE_ENTERED,
+        new EventHandler<MouseEvent>() {
+          @Override
+          public void handle(MouseEvent e) {
+            back.setEffect(shadow);
+          }
+        });
 
-    back.addEventHandler(MouseEvent.MOUSE_EXITED, new EventHandler<MouseEvent>() {
-      @Override
-      public void handle(MouseEvent e) {
-        back.setEffect(null);
-      }
-    });
+    back.addEventHandler(MouseEvent.MOUSE_EXITED,
+        new EventHandler<MouseEvent>() {
+          @Override
+          public void handle(MouseEvent e) {
+            back.setEffect(null);
+          }
+        });
 
-    back2.addEventHandler(MouseEvent.MOUSE_ENTERED, new EventHandler<MouseEvent>() {
-      @Override
-      public void handle(MouseEvent e) {
-        back2.setEffect(shadow);
-      }
-    });
+    back2.addEventHandler(MouseEvent.MOUSE_ENTERED,
+        new EventHandler<MouseEvent>() {
+          @Override
+          public void handle(MouseEvent e) {
+            back2.setEffect(shadow);
+          }
+        });
 
-    back2.addEventHandler(MouseEvent.MOUSE_EXITED, new EventHandler<MouseEvent>() {
-      @Override
-      public void handle(MouseEvent e) {
-        back2.setEffect(null);
-      }
-    });
+    back2.addEventHandler(MouseEvent.MOUSE_EXITED,
+        new EventHandler<MouseEvent>() {
+          @Override
+          public void handle(MouseEvent e) {
+            back2.setEffect(null);
+          }
+        });
 
-    back3.addEventHandler(MouseEvent.MOUSE_ENTERED, new EventHandler<MouseEvent>() {
-      @Override
-      public void handle(MouseEvent e) {
-        back3.setEffect(shadow);
-      }
-    });
+    back3.addEventHandler(MouseEvent.MOUSE_ENTERED,
+        new EventHandler<MouseEvent>() {
+          @Override
+          public void handle(MouseEvent e) {
+            back3.setEffect(shadow);
+          }
+        });
 
-    back3.addEventHandler(MouseEvent.MOUSE_EXITED, new EventHandler<MouseEvent>() {
-      @Override
-      public void handle(MouseEvent e) {
-        back3.setEffect(null);
-      }
-    });
+    back3.addEventHandler(MouseEvent.MOUSE_EXITED,
+        new EventHandler<MouseEvent>() {
+          @Override
+          public void handle(MouseEvent e) {
+            back3.setEffect(null);
+          }
+        });
   }
 
 
